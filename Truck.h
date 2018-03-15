@@ -7,13 +7,13 @@ class Truck
 private:
 	TruckType tt;
 	float capacity;
-	Garage* g;
+	Vertex* g;
 public:
-	Truck(TruckType tt, float cap, Garage* g);
+	Truck(TruckType tt, float cap, Vertex* g);
 	void setType(TruckType tt);
 	void setCapacity(int cap);
-	void setGarage(Garage* g);
+	void setGarage(Vertex* g);
 	TruckType getType();
 	float getCapacity();
-	Garage* getGarage();
+	Vertex* getGarage();
 };
