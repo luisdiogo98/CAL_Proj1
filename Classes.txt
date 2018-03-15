@@ -1,0 +1,23 @@
+Genérico
+   - Avançar Tempo
+   (Cada contentor deve incrementar a sua quantidade por Random() * Fator de Resíduo)
+   (Cada contentor cheio deve adicionar-se a si próprio a uma lista de contentores cheios)
+   - Listar Contentores Cheios
+   - Listar Camiões (incluindo Garagem)
+   - Mostrar Mapa (????)
+   - Adicionar/Remover Camiões
+
+Frota
+   - Camião (Tipo, Capacidade, Garagem)
+
+Mapa (Grafo)
+   - Nós 
+      - Neutros
+      - Contentores (Tipo, Fator de Resíduo, Capacidade)
+      - Garagens (Camiões)
+      - Estações de Tratamento
+    - Arestas
+       Estradas (Pesadas com distâncias)
+    - Listas de Contentores Cheios por Tipo
+    - Lista de Garagens
+    - Lista de Estações de Tratamento
