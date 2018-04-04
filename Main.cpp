@@ -17,7 +17,7 @@ bool mainMenu()
 	cout << "4 - Map" << endl;
 	cout << "5 - Add/Remove Trucks" << endl;
 	cout << "6 - Send Truck" << endl;
-	cout << "6 - Exit" << endl;
+	cout << "7 - Exit" << endl;
 
 	while (repeat)
 	{

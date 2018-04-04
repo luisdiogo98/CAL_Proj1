@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Graph.h"
+#include "Landmark.h"
+
 typedef enum {INDISCRIMINATED, PLASTIC, PAPER, GLASS} GarbageType;
 
 class Truck
@@ -7,13 +10,13 @@ class Truck
 private:
 	GarbageType tt;
 	float capacity;
-	Vertex* g;
+	Vertex<Landmark>* g;
 public:
-	Truck(GarbageType tt, float cap, Vertex* g);
+	Truck(GarbageType tt, float cap, Vertex<Landmark>* g);
 	void setType(GarbageType tt);
 	void setCapacity(int cap);
-	void setGarage(Vertex* g);
+	void setGarage(Vertex<Landmark>* g);
 	GarbageType getType();
 	float getCapacity();
-	Vertex* getGarage();
+	Vertex<Landmark>* getGarage();
 };
