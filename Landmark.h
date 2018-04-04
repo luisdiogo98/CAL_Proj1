@@ -3,7 +3,7 @@
 class Landmark
 {
 private:
-	int id;
+	unsigned long long id;
 	double x;
 	double y;
 public:
