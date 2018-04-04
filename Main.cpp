@@ -2,9 +2,53 @@
 #include "Company.h"
 #include "Graph.h"
 #include "Garage.h"
+#include "Container.h"
 
 
 using namespace std;
+
+void displayTrucks(Company c)
+{
+	if (c.getTrucks().size() == 0)
+	{
+		cout << "No available trucks." << endl;
+		getchar();
+		return;
+	}
+
+	cout << "Avaliable trucks:" << endl << endl;
+
+	vector<Truck*> tr = c.getTrucks();
+	int i = 0;
+	for (vector<Truck*>::iterator it = tr.begin(); it != tr.end(); it++)
+	{
+		i++;
+		cout << i << ": Type - " << (*it)->getType() << "	Capacity - " << (*it)->getCapacity() << "	Garage - " << (*it)->getGarage()->getID() << endl;
+	}
+	getchar();
+}
+
+void displayFullContainers(Company c)
+{
+	if (c.getFullContainers().size() == 0)
+	{
+		cout << "No full containers." << endl;
+		getchar();
+		return;
+	}
+
+	cout << "Full containers:" << endl << endl;
+
+	vector<Landmark*> cont = c.getFullContainers();
+	int i = 0;
+	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
+	{
+		i++;
+		Container * c = (Container *) (*it);
+		cout << i << ": ID - " << c->getID() << "	Type - " << c->getType() << "	Capacity - " << c->getCapacity() << "	Current Load - " << c->getCurrentLoad() << endl;
+	}
+	getchar();
+}
 
 void advanceTime(Company c)
 {
@@ -179,11 +223,13 @@ bool mainMenu(Company &c)
 			}
 			case 2:
 			{
+				displayTrucks(c);
 				repeat = false;
 				return true;
 			}
 			case 3:
 			{
+				displayFullContainers(c);
 				repeat = false;
 				return true;
 			}

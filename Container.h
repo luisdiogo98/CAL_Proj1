@@ -15,4 +15,7 @@ public:
 	bool advanceTime();
 	bool isFull() const;
 	void visit();
+	GarbageType getType();
+	float getCurrentLoad();
+	float getCapacity();
 };

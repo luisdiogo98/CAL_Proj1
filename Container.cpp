@@ -26,3 +26,18 @@ void Container::visit()
 {
 	filled = 0;
 }
+
+GarbageType Container::getType()
+{
+	return type;
+}
+
+float Container::getCurrentLoad()
+{
+	return filled;
+}
+
+float Container::getCapacity()
+{
+	return capacity;
+}
