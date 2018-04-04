@@ -24,6 +24,7 @@ double Landmark::getY() const
 	return y;
 }
 
-void Landmark::advanceTime()
+bool Landmark::advanceTime()
 {
+	return false;
 }

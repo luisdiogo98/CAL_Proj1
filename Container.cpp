@@ -14,12 +14,15 @@ bool Container::advanceTime()
 	float randomGarbage = ((rand() % 101) / 100.0) * garbageGrowth;
 	filled += randomGarbage;
 
+	if (filled > capacity)
+		filled = capacity;
+
 	return isFull();
 }
 
 bool Container::isFull() const
 {
-	return filled >= capacity;
+	return filled == capacity;
 }
 
 void Container::visit()

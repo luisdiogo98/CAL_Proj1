@@ -11,5 +11,5 @@ public:
 	int getID() const;
 	double getX() const;
 	double getY() const;
-	void advanceTime();
+	bool advanceTime();
 };

@@ -55,7 +55,10 @@ void advanceTime(Company c)
 	vector<Landmark*> cont = c.getMap().dfs();
 	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
 	{
-		(*it)->advanceTime();
+		if ((*it)->advanceTime())
+		{
+			c.addFullContainer(*it);
+		}
 	}
 	cout << "Time advanced." << endl << endl;
 }
