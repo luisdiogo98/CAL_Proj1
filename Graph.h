@@ -39,6 +39,7 @@ public:
 	T getInfo() const;
 	double getDist() const;
 	Vertex *getPath() const;
+	bool Vertex<T>::removeEdgeTo(Vertex<T> *d);
 	friend class Graph<T>;
 	friend class MutablePriorityQueue<Vertex<T>>;
 };
@@ -85,7 +86,7 @@ class Edge {
 	string name;		   // edge name
 public:
 	Edge(Vertex<T> *d, double w);
-	void setName(String n);
+	void setName(string n);
 	friend class Graph<T>;
 	friend class Vertex<T>;
 };
@@ -94,7 +95,7 @@ template <class T>
 Edge<T>::Edge(Vertex<T> *d, double w) : dest(d), weight(w) {}
 
 template <class T>
-void Edge<T>::setName(String n) { name = n; }
+void Edge<T>::setName(string n) { name = n; }
 
 
 /*************************** Graph  **************************/
@@ -109,10 +110,20 @@ public:
 	bool addEdge(const T &sourc, const T &dest, double w);
 	int getNumVertex() const;
 	vector<Vertex<T> *> getVertexSet() const;
+	bool removeVertex(const T &in);
+	bool removeEdge(const T &sourc, const T &dest);
+	vector<T> dfs() const;
+	vector<T> bfs(const T &source) const;
+	vector<T> topsort() const;
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
+	Vertex<T> * Graph<T>::initSingleSource(const T &origin);
+	bool Graph<T>::relax(Vertex<T> *v, Vertex<T> *w, double weight);
+
+	void Graph<T>::dfsVisit(Vertex<T> *v, vector<T> & res) const;
+
 
 };
 
@@ -137,30 +148,6 @@ Vertex<T> * Graph<T>::findVertex(const T &in) const {
 	return NULL;
 }
 
-/****************** Provided constructors and functions ********************/
-
-template <class T>
-Vertex<T>::Vertex(T in): info(in) {}
-
-template <class T>
-Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w) {}
-
-
-template <class T>
-int Graph<T>::getNumVertex() const {
-	return vertexSet.size();
-}
-
-/*
- * Auxiliary function to find a vertex with a given content.
- */
-template <class T>
-Vertex<T> * Graph<T>::findVertex(const T &in) const {
-	for (auto v : vertexSet)
-		if (v->info == in)
-			return v;
-	return NULL;
-}
 
 /****************** 1a) addVertex ********************/
 
@@ -193,14 +180,7 @@ bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
 	return true;
 }
 
-/*
- * Auxiliary function to add an outgoing edge to a vertex (this),
- * with a given destination vertex (d) and edge weight (w).
- */
-template <class T>
-void Vertex<T>::addEdge(Vertex<T> *d, double w) {
-	adj.push_back(Edge<T>(d, w));
-}
+
 
 
 /****************** 1c) removeEdge ********************/
@@ -348,52 +328,28 @@ vector<T> Graph<T>::topsort() const {
 		if (v->indegree == 0)
 			q.push(v);
 
-	while( !q.empty() ) {
+	while (!q.empty()) {
 		Vertex<T>* v = q.front();
 		q.pop();
 		res.push_back(v->info);
-		for(auto & e : v->adj) {
+		for (auto & e : v->adj) {
 			auto w = e.dest;
 			w->indegree--;
-			if(w->indegree == 0)
+			if (w->indegree == 0)
 				q.push(w);
 		}
 	}
 
-	if ( res.size() != vertexSet.size() ) {
+	if (res.size() != vertexSet.size()) {
 		cout << "Ordenacao Impossivel!" << endl;
 		res.clear();
 		return res;
 	}
 
 	return res;
-
-/*
-*  Adds a vertex with a given content or info (in) to a graph (this).
-*  Returns true if successful, and false if a vertex with that content already exists.
-*/
-template <class T>
-bool Graph<T>::addVertex(const T &in) {
-	if (findVertex(in) != NULL)
-		return false;
-	vertexSet.push_back(new Vertex<T>(in));
-	return true;
 }
 
-/*
-* Adds an edge to a graph (this), given the contents of the source and
-* destination vertices and the edge weight (w).
-* Returns true if successful, and false if the source or destination vertex does not exist.
-*/
-template <class T>
-bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
-	auto v1 = findVertex(sourc);
-	auto v2 = findVertex(dest);
-	if (v1 == NULL || v2 == NULL)
-		return false;
-	v1->addEdge(v2, w);
-	return true;
-}
+
 
 
 /**************** Single Source Shortest Path algorithms ************/

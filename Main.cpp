@@ -61,6 +61,11 @@ bool mainMenu()
 			}
 			case 6:
 			{
+				repeat = false;
+				return true;
+			}
+			case 7:
+			{
 				return false;
 			}
 			default:

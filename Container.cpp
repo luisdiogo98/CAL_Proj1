@@ -1,6 +1,5 @@
-#include "Container.h"
 #include <stdlib.h>
-
+#include "Container.h"
 
 Container::Container(GarbageType type, float garbageGrowth, float capacity)
 {
