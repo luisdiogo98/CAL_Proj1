@@ -9,17 +9,17 @@ Landmark::Landmark(int id, double x, double y)
 	this->y = y;
 }
 
-int Landmark::getID()
+int Landmark::getID() const
 {
 	return id;
 }
 
-double Landmark::getX()
+double Landmark::getX() const
 {
 	return x;
 }
 
-double Landmark::getY()
+double Landmark::getY() const
 {
 	return y;
 }

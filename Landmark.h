@@ -8,8 +8,8 @@ private:
 	double y;
 public:
 	Landmark(int id, double x, double y);
-	int getID();
-	double getX();
-	double getY();
+	int getID() const;
+	double getX() const;
+	double getY() const;
 	void advanceTime();
 };

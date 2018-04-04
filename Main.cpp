@@ -107,7 +107,7 @@ void addTruck(Company &c)
 
 	cout << "Choose truck type:" << endl;
 	cout << "1 - INDISCRIMINATED" << endl;
-	cout << "2 -  PLASTIC" << endl;
+	cout << "2 - PLASTIC" << endl;
 	cout << "3 - PAPER" << endl;
 	cout << "4 - GLASS" << endl;
 
@@ -164,12 +164,12 @@ void addTruck(Company &c)
 	for (vector<Landmark*>::iterator it = gar.begin(); it != gar.end(); it++)
 	{
 		i++;
-		cout << i << ": ID - " << (*it)->getID << endl;
+		cout << i << ": ID - " << (*it)->getID() << endl;
 	}
 
 	cin >> choice;
 
-	while (cin.fail() || choice < 0 || choice > i)
+	while (cin.fail() || choice < 1 || choice > i)
 	{
 		cin.clear();
 		cin.ignore(1000, '\n');
@@ -235,6 +235,7 @@ bool mainMenu(Company &c)
 			}
 			case 4:
 			{
+				c.showMap();
 				repeat = false;
 				return true;
 			}

@@ -25,4 +25,5 @@ public:
 	void addTruck(Truck* t);
 	void removeFullContainer(Landmark* l);
 	void removeTruck(Truck* t);
+	void showMap() const;
 };

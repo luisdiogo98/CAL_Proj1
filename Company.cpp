@@ -1,4 +1,5 @@
 #include "Company.h"
+#include "graphviewer.h"
 
 Company::Company(Graph<Landmark*> m)
 {
@@ -72,4 +73,31 @@ void Company::removeTruck(Truck * t)
 			return;
 		}
 	}
+}
+
+void Company::showMap() const
+{
+	unsigned long long edgeID = 0;
+	//Checkar const em caso de erro
+	GraphViewer *gv = new GraphViewer(600, 600, false);
+	gv->createWindow(600, 600);
+
+	vector<Vertex<Landmark*>*> vertices = map.getVertexSet();
+
+	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
+	{
+		gv->addNode((*it)->info->getID(), (*it)->info->getX(), (*it)->info->getY());
+
+		vector<Edge<Landmark*>> edges = (*it)->adj;
+
+		for (vector<Edge<Landmark*>>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)
+		{
+			gv->addEdge(edgeID, (*it)->info->getID(), ti->dest->info->getID(), EdgeType::DIRECTED);
+			gv->setEdgeLabel(edgeID, ti->name);
+			edgeID++;
+		}
+	}
+
+	gv->rearrange();
+	free(gv); //Cuidado com este free
 }

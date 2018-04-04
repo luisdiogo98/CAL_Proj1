@@ -42,6 +42,7 @@ public:
 	bool removeEdgeTo(Vertex<T> *d);
 	friend class Graph<T>;
 	friend class MutablePriorityQueue<Vertex<T>>;
+	friend class Company;
 };
 
 
@@ -89,6 +90,7 @@ public:
 	void setName(string n);
 	friend class Graph<T>;
 	friend class Vertex<T>;
+	friend class Company;
 };
 
 template <class T>
