@@ -39,7 +39,7 @@ public:
 	T getInfo() const;
 	double getDist() const;
 	Vertex *getPath() const;
-	bool Vertex<T>::removeEdgeTo(Vertex<T> *d);
+	bool removeEdgeTo(Vertex<T> *d);
 	friend class Graph<T>;
 	friend class MutablePriorityQueue<Vertex<T>>;
 };
@@ -119,10 +119,10 @@ public:
 	// Fp05 - single source
 	void dijkstraShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
-	Vertex<T> * Graph<T>::initSingleSource(const T &origin);
-	bool Graph<T>::relax(Vertex<T> *v, Vertex<T> *w, double weight);
+	Vertex<T> * initSingleSource(const T &origin);
+	bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
 
-	void Graph<T>::dfsVisit(Vertex<T> *v, vector<T> & res) const;
+	void dfsVisit(Vertex<T> *v, vector<T> & res) const;
 
 
 };

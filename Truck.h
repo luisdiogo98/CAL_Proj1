@@ -10,13 +10,13 @@ class Truck
 private:
 	GarbageType tt;
 	float capacity;
-	Vertex<Landmark>* g;
+	Landmark* g;
 public:
-	Truck(GarbageType tt, float cap, Vertex<Landmark>* g);
+	Truck(GarbageType tt, float cap, Landmark* g);
 	void setType(GarbageType tt);
 	void setCapacity(int cap);
-	void setGarage(Vertex<Landmark>* g);
+	void setGarage(Landmark* g);
 	GarbageType getType();
 	float getCapacity();
-	Vertex<Landmark>* getGarage();
+	Landmark* getGarage();
 };

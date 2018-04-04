@@ -1,4 +1,4 @@
-#include "..\..\CAL_Proj1\Company.h"
+#include "Company.h"
 
 Company::Company(Graph<Landmark*> m)
 {
@@ -25,6 +25,11 @@ vector<Landmark*> Company::getFullContainers()
 	return FullContainers;
 }
 
+vector<Truck*> Company::getTrucks()
+{
+	return Trucks;
+}
+
 void Company::addGarage(Landmark * l)
 {
 	Garages.push_back(l);
@@ -40,6 +45,11 @@ void Company::addFullContainer(Landmark * l)
 	FullContainers.push_back(l);
 }
 
+void Company::addTruck(Truck * t)
+{
+	Trucks.push_back(t);
+}
+
 void Company::removeFullContainer(Landmark * l)
 {
 	for (vector<Landmark*>::iterator it = FullContainers.begin(); it != FullContainers.end(); it++)
@@ -47,6 +57,18 @@ void Company::removeFullContainer(Landmark * l)
 		if (*it == l)
 		{
 			FullContainers.erase(it);
+			return;
+		}
+	}
+}
+
+void Company::removeTruck(Truck * t)
+{
+	for (vector<Truck*>::iterator it = Trucks.begin(); it != Trucks.end(); it++)
+	{
+		if (*it == t)
+		{
+			Trucks.erase(it);
 			return;
 		}
 	}

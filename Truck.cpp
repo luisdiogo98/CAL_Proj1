@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Truck::Truck(GarbageType tt, float cap, Vertex<Landmark>* g)
+Truck::Truck(GarbageType tt, float cap, Landmark* g)
 {
 	this->tt = tt;
 	capacity = cap;
@@ -19,7 +19,7 @@ void Truck::setCapacity(int cap)
 	capacity = cap;
 }
 
-void Truck::setGarage(Vertex<Landmark> * g)
+void Truck::setGarage(Landmark * g)
 {
 	this->g = g;
 }
@@ -34,7 +34,7 @@ float Truck::getCapacity()
 	return capacity;
 }
 
-Vertex<Landmark> * Truck::getGarage()
+Landmark * Truck::getGarage()
 {
 	return g;
 }
