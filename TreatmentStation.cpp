@@ -1,5 +1,5 @@
 #include "TreatmentStation.h"
 
-TreatmentStation::TreatmentStation()
+TreatmentStation::TreatmentStation(int id) : Landmark(id)
 {
 }

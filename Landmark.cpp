@@ -2,7 +2,12 @@
 
 using namespace std;
 
-Landmark::Landmark()
+Landmark::Landmark(int id)
 {
-	
+	this->id = id;
+}
+
+int Landmark::getID()
+{
+	return id;
 }

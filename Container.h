@@ -11,7 +11,7 @@ private:
 	float filled;
 	float capacity;
 public:
-	Container(GarbageType type, float garbageGrowth, float capacity);
+	Container(int id, GarbageType type, float garbageGrowth, float capacity);
 	bool advanceTime(float time);
 	bool isFull() const;
 	void visit();

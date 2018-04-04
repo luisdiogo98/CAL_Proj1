@@ -2,12 +2,12 @@
 
 using namespace std;
 
-Garage::Garage()
+Garage::Garage(int id) : Landmark(id)
 {
-
+	
 }
 
-Garage::Garage(vector<Truck*> tr)
+Garage::Garage(int id, vector<Truck*> tr) : Landmark(id)
 {
 	trucks = tr;
 }

@@ -11,8 +11,8 @@ class Garage : public Landmark
 private:
 	vector<Truck*> trucks;
 public:
-	Garage();
-	Garage(vector<Truck*> tr);
+	Garage(int id);
+	Garage(int id, vector<Truck*> tr);
 	vector<Truck*> getTrucks();
 	void setTrucks(vector<Truck*> tr);
 	bool addTruck(Truck* tr);

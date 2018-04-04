@@ -2,6 +2,9 @@
 
 class Landmark
 {
+private:
+	int id;
 public:
-	Landmark();
+	Landmark(int id);
+	int getID();
 };
