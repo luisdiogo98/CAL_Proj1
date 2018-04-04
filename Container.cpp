@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "Container.h"
 
-Container::Container(int id, GarbageType type, float garbageGrowth, float capacity) : Landmark(id)
+Container::Container(int id, double x, double y, GarbageType type, float garbageGrowth, float capacity) : Landmark(id, x, y)
 {
 	this->type = type;
 	this->garbageGrowth = garbageGrowth;

@@ -6,5 +6,5 @@
 class TreatmentStation : public Landmark
 {
 public:
-	TreatmentStation(int id);
+	TreatmentStation(int id, double x, double y);
 };
