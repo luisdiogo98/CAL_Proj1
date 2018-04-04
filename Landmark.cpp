@@ -23,3 +23,7 @@ double Landmark::getY()
 {
 	return y;
 }
+
+void Landmark::advanceTime()
+{
+}

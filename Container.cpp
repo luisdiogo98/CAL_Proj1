@@ -9,9 +9,9 @@ Container::Container(int id, double x, double y, GarbageType type, float garbage
 	filled = 0;
 }
 
-bool Container::advanceTime(float time)
+bool Container::advanceTime()
 {
-	float randomGarbage = ((rand() % 101) / 100.0) * garbageGrowth * time;
+	float randomGarbage = ((rand() % 101) / 100.0) * garbageGrowth;
 	filled += randomGarbage;
 
 	return isFull();

@@ -6,6 +6,16 @@
 
 using namespace std;
 
+void advanceTime(Company c)
+{
+	vector<Landmark*> cont = c.getMap().dfs();
+	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
+	{
+		(*it)->advanceTime();
+	}
+	cout << "Time advanced." << endl << endl;
+}
+
 void removeTruck(Company &c)
 {
 	if (c.getTrucks().size() == 0)
@@ -163,6 +173,7 @@ bool mainMenu(Company &c)
 			{
 			case 1:
 			{
+				advanceTime(c);
 				repeat = false;
 				return true;
 			}
@@ -183,6 +194,7 @@ bool mainMenu(Company &c)
 			}
 			case 5:
 			{
+				addTruck(c);
 				repeat = false;
 				return true;
 			}

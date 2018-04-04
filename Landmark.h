@@ -11,4 +11,5 @@ public:
 	int getID();
 	double getX();
 	double getY();
+	void advanceTime();
 };
