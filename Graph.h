@@ -31,7 +31,7 @@ class Vertex {
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 
 	bool processing = false;
-	void addEdge(Vertex<T> *dest, double w);
+	void addEdge(Vertex<T> *dest, double w, string n);
 
 public:
 	Vertex(T in);
@@ -54,8 +54,8 @@ Vertex<T>::Vertex(T in) : info(in) {}
 * with a given destination vertex (d) and edge weight (w).
 */
 template <class T>
-void Vertex<T>::addEdge(Vertex<T> *d, double w) {
-	adj.push_back(Edge<T>(d, w));
+void Vertex<T>::addEdge(Vertex<T> *d, double w, string n) {
+	adj.push_back(Edge<T>(d, w, n));
 }
 
 template <class T>
@@ -86,7 +86,7 @@ class Edge {
 	double weight;         // edge weight
 	string name;		   // edge name
 public:
-	Edge(Vertex<T> *d, double w);
+	Edge(Vertex<T> *d, double w, string n);
 	void setName(string n);
 	friend class Graph<T>;
 	friend class Vertex<T>;
@@ -94,7 +94,7 @@ public:
 };
 
 template <class T>
-Edge<T>::Edge(Vertex<T> *d, double w) : dest(d), weight(w) {}
+Edge<T>::Edge(Vertex<T> *d, double w, string n) : dest(d), weight(w), name(n) {}
 
 template <class T>
 void Edge<T>::setName(string n) { name = n; }
@@ -109,7 +109,7 @@ class Graph {
 public:
 	Vertex<T> *findVertex(const T &in) const;
 	bool addVertex(const T &in);
-	bool addEdge(const T &sourc, const T &dest, double w);
+	bool addEdge(const T &sourc, const T &dest, double w, string n);
 	int getNumVertex() const;
 	vector<Vertex<T> *> getVertexSet() const;
 	bool removeVertex(const T &in);
@@ -173,12 +173,12 @@ bool Graph<T>::addVertex(const T &in) {
  * Returns true if successful, and false if the source or destination vertex does not exist.
  */
 template <class T>
-bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
+bool Graph<T>::addEdge(const T &sourc, const T &dest, double w, string n) {
 	auto v1 = findVertex(sourc);
 	auto v2 = findVertex(dest);
 	if (v1 == NULL || v2 == NULL)
 		return false;
-	v1->addEdge(v2,w);
+	v1->addEdge(v2,w, n);
 	return true;
 }
 

@@ -116,7 +116,7 @@ void Company::Trata_fich_roads(string text_line)
 
 
 	unsigned long long id;
-	string nome, is_two_ways;
+	string nome = "", is_two_ways;
 	string conn_line;
 	string nome_fich = "Edges.txt";
 
@@ -192,9 +192,7 @@ void Company::Trata_fich_roads(string text_line)
 
 			//fazer calculo de distancia
 			double dist = haversine_distance(source->getInfo()->getX(),source->getInfo()->getY(),dest->getInfo()->getX(),dest->getInfo()->getY());
-			Edge<Landmark*> e(source,dist);
-			e.setName(nome);
-			map.addEdge(source->getInfo(), dest->getInfo(), dist);
+			map.addEdge(source->getInfo(), dest->getInfo(), dist, nome);
 
 		}
 		else
