@@ -9,6 +9,11 @@ Landmark::Landmark(int id, double x, double y)
 	this->y = y;
 }
 
+void Landmark::setID(int id)
+{
+	this->id = id;
+}
+
 int Landmark::getID() const
 {
 	return id;

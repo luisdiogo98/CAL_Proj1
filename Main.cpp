@@ -278,6 +278,7 @@ int main()
 	Graph<Landmark*> g;
 	Company c(g);
 	c.read_files();
+	c.fixIndex();
 	while (mainMenu(c));
 	return 0;
 }

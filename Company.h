@@ -29,4 +29,5 @@ public:
 	void Trata_fich_roads(string text_line);
 	void read_files();
 	void Trata_fich_nodes(string text_lines);
+	void fixIndex();
 };

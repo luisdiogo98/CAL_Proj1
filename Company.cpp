@@ -87,6 +87,9 @@ void Company::showMap() const
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
 		gv->addNode((*it)->info->getID(), (*it)->info->getX() * 10000 - 41.1 * 10000, (*it)->info->getY() * 10000 + 8.6 * 10000);
+		
+		if((*it)->info->getID() % 2)
+			gv->setVertexColor((*it)->info->getID(), "blue");
 
 		vector<Edge<Landmark*>> edges = (*it)->adj;
 
@@ -94,11 +97,22 @@ void Company::showMap() const
 		{
 			gv->addEdge(edgeID, (*it)->info->getID(), ti->dest->info->getID(), EdgeType::DIRECTED);
 			gv->setEdgeLabel(edgeID, ti->name);
-			cout << ti->name << endl;
 			edgeID++;
 		}
 	}
 
 	gv->rearrange();
 	free(gv); //Cuidado com este free
+}
+
+void Company::fixIndex()
+{
+	int i = 0;
+	vector<Vertex<Landmark*>*> v = map.getVertexSet();
+
+	for (vector<Vertex<Landmark*>*>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		(*it)->info->setID(i);
+		i++;
+	}
 }
