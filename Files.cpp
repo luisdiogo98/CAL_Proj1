@@ -9,6 +9,11 @@
 
 #include "Company.h"
 #include "Road_temp.h"
+#include "Garage.h"
+#include "TreatmentStation.h"
+#include "Landmark.h"
+#include "Container.h"
+
 
 
 using namespace std;
@@ -81,10 +86,48 @@ while (!my_nodes.eof())
 
 	linha_node >> lat_deg >> p_virgula;
 	linha_node >> longe_deg >> p_virgula;
-	int random = rand() % 100;
-	Landmark *info = new Landmark(id, lat_deg, longe_deg);
-	
-	cout << "1: " << id << endl;
+	int random = rand() % 1000;
+
+	Landmark *info;
+
+	if (random < 4)
+	{
+		info = new Garage(id, lat_deg, longe_deg);
+		Garages.push_back(info);
+	}
+	else if (random < 6)
+	{
+		info = new TreatmentStation(id, lat_deg, longe_deg);
+		TreatmentStations.push_back(info);
+	}
+	else if (random < 106)
+	{
+		int cap = 500 + rand() % (1500 - 500 + 1);
+		int growth = 400 + rand() % (600 - 400 + 1);
+		info = new Container(id, lat_deg, longe_deg, INDISCRIMINATED, growth, cap);
+	}
+	else if (random < 206)
+	{
+		int cap = 500 + rand() % (1500 - 500 + 1);
+		int growth = 400 + rand() % (600 - 400 + 1);
+		info = new Container(id, lat_deg, longe_deg, PLASTIC, growth, cap);
+	}
+	else if (random < 306)
+	{
+		int cap = 500 + rand() % (1500 - 500 + 1);
+		int growth = 400 + rand() % (600 - 400 + 1);
+		info = new Container(id, lat_deg, longe_deg, PAPER, growth, cap);
+	}
+	else if (random < 406)
+	{
+		int cap = 500 + rand() % (1500 - 500 + 1);
+		int growth = 400 + rand() % (600 - 400 + 1);
+		info = new Container(id, lat_deg, longe_deg, GLASS, growth, cap);
+	}
+	else
+	{
+		info = new Landmark(id, lat_deg, longe_deg);
+	}	
 	
 	n.insert(std::pair<unsigned long long, Landmark*>(id, info));
 
@@ -141,8 +184,6 @@ while (!my_roads.eof())
 	{
 		dois_sentidos = false;
 	}
-
-	cout << "2: " << road_id << endl;
 
 	Road road = Road(road_id, nome, dois_sentidos);
 	r.insert(std::pair<unsigned long long, Road>(road_id, road));

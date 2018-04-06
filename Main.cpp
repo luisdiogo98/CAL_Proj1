@@ -7,7 +7,32 @@
 
 using namespace std;
 
-void displayTrucks(Company c)
+string type_names[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
+
+void showGaragesandStations(Company &c)
+{
+	cout << endl << "Available garages:" << endl;
+
+	vector<Landmark*> gar = c.getGarages();
+	int i = 0;
+	for (vector<Landmark*>::iterator it = gar.begin(); it != gar.end(); it++)
+	{
+		i++;
+		cout << i << ": ID - " << (*it)->getID() << endl;
+	}
+
+	cout << endl << "Available treatment stations:" << endl;
+
+	vector<Landmark*> sta = c.getTreatmentStations();
+	i = 0;
+	for (vector<Landmark*>::iterator it = sta.begin(); it != sta.end(); it++)
+	{
+		i++;
+		cout << i << ": ID - " << (*it)->getID() << endl;
+	}
+}
+
+void displayTrucks(Company &c)
 {
 	if (c.getTrucks().size() == 0)
 	{
@@ -23,12 +48,13 @@ void displayTrucks(Company c)
 	for (vector<Truck*>::iterator it = tr.begin(); it != tr.end(); it++)
 	{
 		i++;
-		cout << i << ": Type - " << (*it)->getType() << "	Capacity - " << (*it)->getCapacity() << "	Garage - " << (*it)->getGarage()->getID() << endl;
+		cout << i << ": Type - " << type_names[(*it)->getType()] << "   Capacity - " << (*it)->getCapacity() << "   Garage - " << (*it)->getGarage()->getID() << endl;
 	}
 	getchar();
 }
 
-void displayFullContainers(Company c)
+
+void displayFullContainers(Company &c)
 {
 	if (c.getFullContainers().size() == 0)
 	{
@@ -45,12 +71,12 @@ void displayFullContainers(Company c)
 	{
 		i++;
 		Container * c = (Container *) (*it);
-		cout << i << ": ID - " << c->getID() << "	Type - " << c->getType() << "	Capacity - " << c->getCapacity() << "	Current Load - " << c->getCurrentLoad() << endl;
+		cout << i << ": ID - " << c->getID() << "   Type - " << type_names[c->getType()] << "   Capacity - " << c->getCapacity() << "   Current Load - " << c->getCurrentLoad() << endl;
 	}
 	getchar();
 }
 
-void advanceTime(Company c)
+void advanceTime(Company &c)
 {
 	vector<Landmark*> cont = c.getMap().dfs();
 	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
@@ -79,7 +105,7 @@ void removeTruck(Company &c)
 	for (vector<Truck*>::iterator it = tr.begin(); it != tr.end(); it++)
 	{
 		i++;
-		cout << i << ": Type - " << (*it)->getType() << "	Capacity - " << (*it)->getCapacity() << "	Garage - " << (*it)->getGarage()->getID() << endl;
+		cout << i << ": Type - " << type_names[(*it)->getType()] << "   Capacity - " << (*it)->getCapacity() << "   Garage - " << (*it)->getGarage()->getID() << endl;
 	}
 
 	cout << endl << "Select truck to remove (0 to cancel): ";
@@ -183,6 +209,7 @@ void addTruck(Company &c)
 	g = gar.at(choice - 1);
 	t = new Truck(tt, capacity, g);
 	((Garage *)gar.at(choice - 1))->addTruck(t);
+	c.addTruck(t);
 }
 
 bool mainMenu(Company &c)
@@ -195,13 +222,14 @@ bool mainMenu(Company &c)
 	cout << "------------|MENU|------------" << endl;
 	cout << "------------------------------" << endl;
 	cout << "1 - Advance Time" << endl;
-	cout << "2 - Available Trucks" << endl;
-	cout << "3 - Full Containers" << endl;
-	cout << "4 - Map" << endl;
-	cout << "5 - Add Trucks" << endl;
-	cout << "6 - Remove Trucks" << endl;
-	cout << "7 - Send Truck" << endl;
-	cout << "8 - Exit" << endl;
+	cout << "2 - Available Garages and Treatment Stations" << endl;
+	cout << "3 - Available Trucks" << endl;
+	cout << "4 - Full Containers" << endl;
+	cout << "5 - Map" << endl;
+	cout << "6 - Add Trucks" << endl;
+	cout << "7 - Remove Trucks" << endl;
+	cout << "8 - Send Truck" << endl;
+	cout << "9 - Exit" << endl;
 
 	while (repeat)
 	{
@@ -226,40 +254,46 @@ bool mainMenu(Company &c)
 			}
 			case 2:
 			{
-				displayTrucks(c);
+				showGaragesandStations(c);
 				repeat = false;
 				return true;
 			}
 			case 3:
 			{
-				displayFullContainers(c);
+				displayTrucks(c);
 				repeat = false;
 				return true;
 			}
 			case 4:
 			{
-				c.showMap();
+				displayFullContainers(c);
 				repeat = false;
 				return true;
 			}
 			case 5:
 			{
-				addTruck(c);
+				c.showMap();
 				repeat = false;
 				return true;
 			}
 			case 6:
 			{
-				removeTruck(c);
+				addTruck(c);
 				repeat = false;
 				return true;
 			}
 			case 7:
 			{
+				removeTruck(c);
 				repeat = false;
 				return true;
 			}
 			case 8:
+			{
+				repeat = false;
+				return true;
+			}
+			case 9:
 			{
 				return false;
 			}

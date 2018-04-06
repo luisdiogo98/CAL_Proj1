@@ -17,4 +17,5 @@ public:
 	void setTrucks(vector<Truck*> tr);
 	bool addTruck(Truck* tr);
 	bool removeTruck(Truck * tr);
+	string getColor();
 };

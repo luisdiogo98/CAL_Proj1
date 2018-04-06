@@ -5,6 +5,7 @@
 
 typedef enum {INDISCRIMINATED, PLASTIC, PAPER, GLASS} GarbageType;
 
+
 class Truck
 {
 private:

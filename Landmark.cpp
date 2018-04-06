@@ -29,7 +29,17 @@ double Landmark::getY() const
 	return y;
 }
 
+bool Landmark::isFull() const
+{
+	return false;
+}
+
 bool Landmark::advanceTime()
 {
 	return false;
+}
+
+string Landmark::getColor()
+{
+	return "WHITE";
 }

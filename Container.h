@@ -18,4 +18,5 @@ public:
 	GarbageType getType();
 	float getCurrentLoad();
 	float getCapacity();
+	string getColor();
 };

@@ -87,10 +87,17 @@ void Company::showMap() const
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
 		gv->addNode((*it)->info->getID(), (*it)->info->getX() * 10000 - 41.1 * 10000, (*it)->info->getY() * 10000 + 8.6 * 10000);
-		
-		if((*it)->info->getID() % 2)
-			gv->setVertexColor((*it)->info->getID(), "blue");
 
+		gv->setVertexColor((*it)->info->getID(), (*it)->info->getColor());
+
+		if ((*it)->info->isFull())
+		{
+			gv->setVertexLabel((*it)->info->getID(), "FULL");
+		}
+	}
+
+	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
+	{
 		vector<Edge<Landmark*>> edges = (*it)->adj;
 
 		for (vector<Edge<Landmark*>>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)

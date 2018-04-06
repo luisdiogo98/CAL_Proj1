@@ -46,3 +46,8 @@ bool Garage::removeTruck(Truck* tr)
 	}
 	return false;
 }
+
+string Garage::getColor()
+{
+	return "MAGENTA";
+}

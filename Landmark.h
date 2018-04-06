@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class Landmark
 {
@@ -12,5 +13,8 @@ public:
 	int getID() const;
 	double getX() const;
 	double getY() const;
-	bool advanceTime();
+	virtual bool isFull() const;
+	virtual bool advanceTime();
+	virtual std::string getColor();
+	
 };

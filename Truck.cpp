@@ -26,7 +26,7 @@ void Truck::setGarage(Landmark * g)
 
 GarbageType Truck::getType()
 {
-	return GarbageType();
+	return tt;
 }
 
 float Truck::getCapacity()

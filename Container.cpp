@@ -11,6 +11,9 @@ Container::Container(int id, double x, double y, GarbageType type, float garbage
 
 bool Container::advanceTime()
 {
+	if (isFull())
+		return false;
+
 	float randomGarbage = ((rand() % 101) / 100.0) * garbageGrowth;
 	filled += randomGarbage;
 
@@ -43,4 +46,24 @@ float Container::getCurrentLoad()
 float Container::getCapacity()
 {
 	return capacity;
+}
+
+string Container::getColor()
+{
+	if (type == INDISCRIMINATED)
+	{
+		return "GRAY";
+	}
+	else if (type == PLASTIC)
+	{
+		return "YELLOW";
+	}
+	else if (type == PAPER)
+	{
+		return "BLUE";
+	}
+	else
+	{
+		return "GREEN";
+	}
 }
