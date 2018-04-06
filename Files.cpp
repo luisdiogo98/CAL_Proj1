@@ -5,7 +5,7 @@
 #include <math.h>
 #include <cmath>
 #include <ctime>
-#include <map> //rip, nao consegui implementar, estava a dar erros com o insert
+#include <map>
 
 #include "Company.h"
 #include "Road_temp.h"
@@ -13,7 +13,14 @@
 
 using namespace std;
 
+double deg2rad(double deg) {
+	return (deg * (acos(-1))) / 180;
+}
 
+
+double rad2deg(double rad) {
+	return (rad * 180 / (acos(-1)));
+}
 
 
 double haversine_distance(double lat1d, double lon1d, double lat2d, double lon2d)
@@ -31,22 +38,12 @@ double haversine_distance(double lat1d, double lon1d, double lat2d, double lon2d
 
 
 
-double deg2rad(double deg) {
-	return (deg * (acos(-1))) / 180;
-}
-
-
-double rad2deg(double rad) {
-	return (rad * 180 / (acos(-1)));
-}
-
-
 void Company::read_files() {
 
-	/*typedef std::map<unsigned long long, Landmark* > nodes;
-	typedef std::map<unsigned long long, Landmark* > roads;*/
-	//vector<Landmark*> nodes; nao deve ser necessario
-	vector<Road>roads;
+	typedef std::map<unsigned long long, Landmark* > nodes;
+	typedef std::map<unsigned long long, Road> roads;
+	nodes n; 
+	roads r;
 	
 	
 
@@ -74,8 +71,8 @@ srand(time(NULL));
 while (!my_nodes.eof())
 {
 	getline(my_nodes, node_line);
-	    unsigned long long id,
-		double lat_deg, longe_deg;
+	unsigned long long id;
+	double lat_deg, longe_deg;
 
 	stringstream linha_node(node_line);
 	char p_virgula;
@@ -86,11 +83,10 @@ while (!my_nodes.eof())
 	linha_node >> longe_deg >> p_virgula;
 	int random = rand() % 100;
 	Landmark *info = new Landmark(id, lat_deg, longe_deg);
-	//verificar se esta dentro dos limites do min e max de latitutes e longitudes ??
 	
+	cout << "1: " << id << endl;
 	
-	//temporario
-	//nodes.push_back(info);
+	n.insert(std::pair<unsigned long long, Landmark*>(id, info));
 
 	
 	map.addVertex(info);
@@ -108,6 +104,8 @@ if (my_roads.fail())
 while (!my_roads.eof())
 {
 	getline(my_roads, road_line);
+	if (road_line == "")
+		break;
 
 	unsigned long long road_id;
 	string nome, is_two_ways;
@@ -144,9 +142,10 @@ while (!my_roads.eof())
 		dois_sentidos = false;
 	}
 
+	cout << "2: " << road_id << endl;
 
-	Road r = Road(road_id, nome, dois_sentidos);
-	roads.push_back(r);
+	Road road = Road(road_id, nome, dois_sentidos);
+	r.insert(std::pair<unsigned long long, Road>(road_id, road));
 
 }
 my_roads.close();
@@ -162,6 +161,8 @@ if (my_roads2.fail())
 while (!my_roads2.eof())
 {
 	getline(my_roads2, road_line2);
+	if (road_line2 == "")
+		break;
 
 	unsigned long long road_id, idnode1, idnode2;
 
@@ -174,51 +175,22 @@ while (!my_roads2.eof())
 	linha_road2 >> road_id >> p_virgula;
 	linha_road2 >> idnode1 >> p_virgula;
 	linha_road2 >> idnode2 >> p_virgula;
-
-	vector<Vertex<Landmark*>*> v = map.getVertexSet();
 	
 		Vertex<Landmark*>* source;
 		Vertex<Landmark*>* dest;
 
+		source = map.findVertex(n.find(idnode1)->second);
+		dest = map.findVertex(n.find(idnode2)->second);
 
+		Road road_info = r.find(road_id)->second;
+		double dist = haversine_distance(source->getInfo()->getX(), source->getInfo()->getY(), dest->getInfo()->getX(), dest->getInfo()->getY());
 
+		map.addEdge(source->getInfo(), dest->getInfo(), dist, road_info.getName());
 
-		for (vector<Vertex<Landmark*>*>::iterator it = v.begin(); it != v.end(); it++)
+		if (road_info.gettwoways())
 		{
-			if ((*it)->getInfo()->getID() == idnode1)
-			{
-				source = *it;
-			}
-
-			if ((*it)->getInfo()->getID() == idnode2)
-			{
-				dest = *it;
-			}
-
-
+			map.addEdge(dest->getInfo(), source->getInfo(), dist, road_info.getName());
 		}
-
-
-		if (source == NULL || dest == NULL)
-			continue;
-		
-		for (auto a : roads) 
-		{
-			if (a.getId == road_id)
-			{
-				double dist = haversine_distance(source->getInfo->getX(), source->getInfo->getY(), dest->getInfo->getX(), dest->getInfo.getY());
-				
-				map.addEdge(source->getInfo(), dest->getInfo(), dist,a.getName());
-
-				if (a.gettwoways)
-				{
-					map.addEdge(dest->getInfo(),source->getInfo(), dist,a.getName());
-				}
-			}
-		}
-		
-
-	
 
 
 }
