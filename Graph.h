@@ -125,8 +125,6 @@ public:
 	bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
 
 	void dfsVisit(Vertex<T> *v, vector<T> & res) const;
-
-
 };
 
 template <class T>

@@ -16,5 +16,5 @@ public:
 	virtual bool isFull() const;
 	virtual bool advanceTime();
 	virtual std::string getColor();
-	
+	virtual double getGarbage();
 };

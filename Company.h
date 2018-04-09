@@ -12,6 +12,8 @@ private:
 	vector<Landmark*> TreatmentStations;
 	vector<Landmark*> FullContainers;
 	vector<Truck*> Trucks;
+
+	bool relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double weight);
 public:
 	Company(Graph<Landmark*> m);
 	Graph<Landmark*> getMap();
@@ -30,4 +32,5 @@ public:
 	void read_files();
 	void Trata_fich_nodes(string text_lines);
 	void fixIndex();
+	vector<Landmark*> sendTruck(Truck* truck);
 };

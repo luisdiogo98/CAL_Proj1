@@ -67,3 +67,11 @@ string Container::getColor()
 		return "GREEN";
 	}
 }
+
+double Container::getGarbage()
+{
+	if (isFull())
+		return filled;
+
+	return 0.0;
+}

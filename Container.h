@@ -19,4 +19,5 @@ public:
 	float getCurrentLoad();
 	float getCapacity();
 	string getColor();
+	double getGarbage();
 };

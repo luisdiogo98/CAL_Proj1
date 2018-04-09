@@ -43,3 +43,8 @@ string Landmark::getColor()
 {
 	return "WHITE";
 }
+
+double Landmark::getGarbage()
+{
+	return 0.0;
+}

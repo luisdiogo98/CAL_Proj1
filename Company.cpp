@@ -1,5 +1,6 @@
 #include "Company.h"
 #include "graphviewer.h"
+#include <float.h>
 
 Company::Company(Graph<Landmark*> m)
 {
@@ -122,4 +123,44 @@ void Company::fixIndex()
 		(*it)->info->setID(i);
 		i++;
 	}
+}
+
+bool Company::relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double weight)
+{
+	if (v->dist + weight - w->info->getGarbage() < w->dist) 
+	{
+		w->dist = v->dist + weight - w->info->getGarbage();
+		w->path = v;
+		return true;
+	}
+
+	else return false;
+}
+
+
+vector<Landmark*> Company::sendTruck(Truck* truck)
+{
+	Landmark* garage = truck->getGarage();
+
+	auto s = map.initSingleSource(garage);
+	MutablePriorityQueue<Vertex<Landmark*>> q;
+	q.insert(s);
+
+	while (!q.empty()) 
+	{
+		auto v = q.extractMin();
+		for (auto e : v->adj) 
+		{
+			auto oldDist = e.dest->dist;
+			if (relaxGarbage(v, e.dest, e.weight)) 
+			{
+				if (oldDist == DBL_MAX)
+					q.insert(e.dest);
+				else
+					q.decreaseKey(e.dest);
+			}
+		}
+	}
+
+	return map.getPath(garage, TreatmentStations[0]);
 }
