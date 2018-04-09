@@ -44,7 +44,9 @@ string Landmark::getColor()
 	return "WHITE";
 }
 
-double Landmark::getGarbage()
+double Landmark::getGarbage(GarbageType tipo)
 {
 	return 0.0;
 }
+
+void Landmark::emptyGarbage(){}

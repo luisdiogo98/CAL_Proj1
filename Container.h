@@ -19,5 +19,6 @@ public:
 	float getCurrentLoad();
 	float getCapacity();
 	string getColor();
-	double getGarbage();
+	double getGarbage(GarbageType type);
+	void emptyGarbage();
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "Truck.h"
 
 class Landmark
 {
@@ -16,5 +17,6 @@ public:
 	virtual bool isFull() const;
 	virtual bool advanceTime();
 	virtual std::string getColor();
-	virtual double getGarbage();
+	virtual double getGarbage(GarbageType tipo);
+	virtual void emptyGarbage();
 };

@@ -13,7 +13,8 @@ private:
 	vector<Landmark*> FullContainers;
 	vector<Truck*> Trucks;
 
-	bool relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double weight);
+	bool relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double weight, GarbageType tipo, double capacity);
+	vector<Landmark*> getNearestTreatmentStation(Landmark *garage, GarbageType tipo, double capacity);
 public:
 	Company(Graph<Landmark*> m);
 	Graph<Landmark*> getMap();

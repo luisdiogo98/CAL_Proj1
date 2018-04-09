@@ -125,22 +125,73 @@ void Company::fixIndex()
 	}
 }
 
-bool Company::relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double weight)
+bool Company::relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double weight, GarbageType tipo, double capacity)
 {
-	if (v->dist + weight - w->info->getGarbage() < w->dist) 
+	double garbage = w->info->getGarbage(tipo);
+
+	if (garbage + v->filling > capacity)
+		garbage = 0;
+
+	if (v->dist + weight - garbage < w->dist) 
 	{
-		w->dist = v->dist + weight - w->info->getGarbage();
+		w->dist = v->dist + weight - garbage;
 		w->path = v;
+		w->filling = v->filling + garbage;
 		return true;
 	}
 
 	else return false;
 }
 
+vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, GarbageType tipo, double capacity)
+{
+	vector<Landmark*> res;
+	Vertex<Landmark*>* v;
+	double min_dist = DBL_MAX;
+
+	for (vector<Landmark*>::iterator it = TreatmentStations.begin(); it != TreatmentStations.end(); it++)
+	{
+		auto aux = map.findVertex(*it);
+		if (aux == nullptr || aux->dist == DBL_MAX) // missing or disconnected
+			continue;
+
+		if (aux->dist < min_dist)
+		{
+			v = aux;
+			min_dist = aux->dist;
+		}
+	}
+
+	for (; v != nullptr; v = v->path)
+		res.push_back(v->info);
+
+	reverse(res.begin(), res.end());
+
+	double filling = 0;
+
+	for (vector<Landmark*>::iterator it = res.begin(); it != res.end(); it++)
+	{
+		double garbage = (*it)->getGarbage(tipo);
+
+		if (!garbage)
+			continue;
+
+		if (filling + garbage <= capacity)
+		{
+			(*it)->emptyGarbage();
+			filling += garbage;
+		}
+	}
+
+	return res;
+}
+
 
 vector<Landmark*> Company::sendTruck(Truck* truck)
 {
 	Landmark* garage = truck->getGarage();
+	GarbageType tipo = truck->getType();
+	double capacity = truck->getCapacity();
 
 	auto s = map.initSingleSource(garage);
 	MutablePriorityQueue<Vertex<Landmark*>> q;
@@ -152,7 +203,7 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 		for (auto e : v->adj) 
 		{
 			auto oldDist = e.dest->dist;
-			if (relaxGarbage(v, e.dest, e.weight)) 
+			if (relaxGarbage(v, e.dest, e.weight, tipo, capacity)) 
 			{
 				if (oldDist == DBL_MAX)
 					q.insert(e.dest);
@@ -162,5 +213,5 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 		}
 	}
 
-	return map.getPath(garage, TreatmentStations[0]);
+	return getNearestTreatmentStation(garage, capacity);
 }

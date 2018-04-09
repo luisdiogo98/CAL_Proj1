@@ -68,10 +68,15 @@ string Container::getColor()
 	}
 }
 
-double Container::getGarbage()
+double Container::getGarbage(GarbageType tipo)
 {
-	if (isFull())
+	if (isFull() && tipo == type)
 		return filled;
 
 	return 0.0;
+}
+
+void Container::emptyGarbage()
+{
+	filled = 0;
 }

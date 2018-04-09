@@ -28,6 +28,7 @@ class Vertex {
 	bool visited;          // auxiliary field
 	double dist = 0;
 	Vertex<T> *path = NULL;
+	double filling = 0; 
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 
 	bool processing = false;
@@ -364,6 +365,7 @@ Vertex<T> * Graph<T>::initSingleSource(const T &origin) {
 	for (auto v : vertexSet) {
 		v->dist = INF;
 		v->path = nullptr;
+		v->filling = 0;
 	}
 	auto s = findVertex(origin);
 	s->dist = 0;
