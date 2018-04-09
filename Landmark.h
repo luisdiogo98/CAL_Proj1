@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include "Truck.h"
+
+typedef enum { INDISCRIMINATED, PLASTIC, PAPER, GLASS } GarbageType;
 
 class Landmark
 {

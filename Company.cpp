@@ -213,5 +213,5 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 		}
 	}
 
-	return getNearestTreatmentStation(garage, capacity);
+	return getNearestTreatmentStation(garage, tipo, capacity);
 }

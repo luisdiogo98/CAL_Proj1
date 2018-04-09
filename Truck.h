@@ -3,7 +3,7 @@
 #include "Graph.h"
 #include "Landmark.h"
 
-typedef enum {INDISCRIMINATED, PLASTIC, PAPER, GLASS} GarbageType;
+
 
 
 class Truck

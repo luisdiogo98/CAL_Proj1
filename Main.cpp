@@ -9,6 +9,52 @@ using namespace std;
 
 string type_names[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
 
+void sendTruck(Company &c)
+{
+	if (c.getTrucks().size() == 0)
+	{
+		cout << "No available trucks." << endl;
+		getchar();
+		return;
+	}
+
+	cout << "Avaliable trucks:" << endl << endl;
+
+	vector<Truck*> tr = c.getTrucks();
+	int i = 0;
+	for (vector<Truck*>::iterator it = tr.begin(); it != tr.end(); it++)
+	{
+		i++;
+		cout << i << ": Type - " << type_names[(*it)->getType()] << "   Capacity - " << (*it)->getCapacity() << "   Garage - " << (*it)->getGarage()->getID() << endl;
+	}
+
+	cout << endl << "Select truck to send (0 to cancel): ";
+	int choice;
+	cin >> choice;
+
+	while (cin.fail() || choice < 0 || choice > i)
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Insert a valid option." << endl;
+		cin >> choice;
+	}
+
+	if (choice == 0)
+		return;
+
+	vector<Landmark*> v = c.sendTruck(c.getTrucks().at(choice - 1));
+
+	cout << endl << "Truck itinerary:" << endl << endl;
+	i = 0;
+
+	for (vector<Landmark*>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		i++;
+		cout << i << ": ID - " << (*it)->getID() << endl;
+	}
+}
+
 void showGaragesandStations(Company &c)
 {
 	cout << endl << "Available garages:" << endl;
@@ -290,6 +336,7 @@ bool mainMenu(Company &c)
 			}
 			case 8:
 			{
+				sendTruck(c);
 				repeat = false;
 				return true;
 			}
