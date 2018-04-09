@@ -77,10 +77,11 @@ void Company::removeTruck(Truck * t)
 
 void Company::showMap() const
 {
-	unsigned long long edgeID = 0;
+	unsigned int edgeID = 0;
 	//Checkar const em caso de erro
-	GraphViewer *gv = new GraphViewer(600, 600, false);
-	gv->createWindow(600, 600);
+	GraphViewer *gv = new GraphViewer(1000, 1000, false);
+	gv->setBackground("background.png");
+	gv->createWindow(1000, 1000);
 
 	vector<Vertex<Landmark*>*> vertices = map.getVertexSet();
 
@@ -89,11 +90,7 @@ void Company::showMap() const
 		gv->addNode((*it)->info->getID(), (*it)->info->getX() * 10000 - 41.1 * 10000, (*it)->info->getY() * 10000 + 8.6 * 10000);
 
 		gv->setVertexColor((*it)->info->getID(), (*it)->info->getColor());
-
-		if ((*it)->info->isFull())
-		{
-			gv->setVertexLabel((*it)->info->getID(), "FULL");
-		}
+		gv->setVertexLabel((*it)->info->getID(), (*it)->info->display());
 	}
 
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
@@ -216,4 +213,45 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 	}
 
 	return getNearestTreatmentStation(garage, tipo, capacity);
+}
+
+void Company::showWay(std::map<int,Landmark*> way) const
+{
+	unsigned int edgeID = 0;
+	//Checkar const em caso de erro
+	GraphViewer *gv = new GraphViewer(1000, 1000, false);
+	gv->setBackground("background.png");
+	gv->createWindow(1000, 1000);
+
+	vector<Vertex<Landmark*>*> vertices = map.getVertexSet();
+
+	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
+	{
+		gv->addNode((*it)->info->getID(), (*it)->info->getX() * 10000 - 41.1 * 10000, (*it)->info->getY() * 10000 + 8.6 * 10000);
+
+		gv->setVertexColor((*it)->info->getID(), (*it)->info->getColor());
+		gv->setVertexLabel((*it)->info->getID(), (*it)->info->display());
+	}
+
+	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
+	{
+		vector<Edge<Landmark*>> edges = (*it)->adj;
+
+		for (vector<Edge<Landmark*>>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)
+		{
+			gv->addEdge(edgeID, (*it)->info->getID(), ti->dest->info->getID(), EdgeType::DIRECTED);
+			gv->setEdgeLabel(edgeID, ti->name);
+
+			if (way.find((*it)->info->getID()) != way.end() && way.find(ti->dest->info->getID()) != way.end())
+			{
+				gv->setEdgeColor(edgeID, "RED");
+				gv->setEdgeThickness(edgeID, 5);
+			}
+
+			edgeID++;
+		}
+	}
+
+	gv->rearrange();
+	free(gv); //Cuidado com este free
 }

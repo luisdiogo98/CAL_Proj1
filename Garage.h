@@ -18,4 +18,5 @@ public:
 	bool addTruck(Truck* tr);
 	bool removeTruck(Truck * tr);
 	string getColor();
+	string display() const;
 };

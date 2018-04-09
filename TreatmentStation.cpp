@@ -8,3 +8,8 @@ string TreatmentStation::getColor()
 {
 	return "BLACK";
 }
+
+string TreatmentStation::display() const
+{
+	return "Station";
+}

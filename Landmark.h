@@ -20,4 +20,5 @@ public:
 	virtual std::string getColor();
 	virtual double getGarbage(GarbageType tipo) const;
 	virtual void emptyGarbage();
+	virtual std::string display() const;
 };

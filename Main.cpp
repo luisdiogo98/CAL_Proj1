@@ -43,16 +43,14 @@ void sendTruck(Company &c)
 	if (choice == 0)
 		return;
 
-	vector<Landmark*> v = c.sendTruck(c.getTrucks().at(choice - 1));
+	vector<Landmark*> way = c.sendTruck(c.getTrucks().at(choice - 1));
 
-	cout << endl << "Truck itinerary:" << endl << endl;
-	i = 0;
+	map<int,Landmark*> theWay;
 
-	for (vector<Landmark*>::iterator it = v.begin(); it != v.end(); it++)
-	{
-		i++;
-		cout << i << ": ID - " << (*it)->getID() << endl;
-	}
+	for (vector<Landmark*>::iterator it = way.begin(); it != way.end(); it++)
+		theWay.insert(pair<unsigned long long, Landmark*>((*it)->getID(), (*it)));
+
+	c.showWay(theWay);
 }
 
 void showGaragesandStations(Company &c)

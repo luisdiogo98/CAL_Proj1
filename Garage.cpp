@@ -51,3 +51,8 @@ string Garage::getColor()
 {
 	return "MAGENTA";
 }
+
+string Garage::display() const
+{
+	return "Garage";
+}

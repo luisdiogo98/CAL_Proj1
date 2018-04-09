@@ -80,3 +80,8 @@ void Container::emptyGarbage()
 {
 	filled = 0;
 }
+
+string Container::display() const
+{
+	return to_string((int)filled) + " / " + to_string((int)capacity);
+}

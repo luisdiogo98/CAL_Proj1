@@ -8,4 +8,5 @@ class TreatmentStation : public Landmark
 public:
 	TreatmentStation(int id, double x, double y);
 	string getColor();
+	string display() const;
 };

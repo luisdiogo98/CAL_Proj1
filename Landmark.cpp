@@ -50,3 +50,8 @@ double Landmark::getGarbage(GarbageType tipo) const
 }
 
 void Landmark::emptyGarbage(){}
+
+string Landmark::display() const
+{
+	return "*";
+}

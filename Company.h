@@ -3,6 +3,7 @@
 #include "Landmark.h"
 #include "Graph.h"
 #include "Truck.h"
+#include <map>
 
 class Company
 {
@@ -34,4 +35,5 @@ public:
 	void Trata_fich_nodes(string text_lines);
 	void fixIndex();
 	vector<Landmark*> sendTruck(Truck* truck);
+	void showWay(std::map<int,Landmark*> way) const;
 };

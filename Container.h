@@ -21,4 +21,5 @@ public:
 	string getColor();
 	double getGarbage(GarbageType type) const;
 	void emptyGarbage();
+	string display() const;
 };
