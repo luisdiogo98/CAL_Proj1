@@ -9,6 +9,7 @@
 #include <list>
 #include <limits>
 #include <cmath>
+#include <float.h>
 #include "MutablePriorityQueue.h"
 
 using namespace std;
@@ -17,7 +18,7 @@ template <class T> class Edge;
 template <class T> class Graph;
 template <class T> class Vertex;
 
-#define INF std::numeric_limits<double>::max()
+#define INF DBL_MAX
 
 /************************* Vertex  **************************/
 
@@ -123,9 +124,12 @@ public:
 	void dijkstraShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
 	Vertex<T> * initSingleSource(const T &origin);
+	Vertex<T> * initSingleSourceNegative(const T &origin);
 	bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
 
 	void dfsVisit(Vertex<T> *v, vector<T> & res) const;
+
+	friend class Company;
 };
 
 template <class T>
@@ -365,10 +369,22 @@ Vertex<T> * Graph<T>::initSingleSource(const T &origin) {
 	for (auto v : vertexSet) {
 		v->dist = INF;
 		v->path = nullptr;
-		v->filling = 0;
 	}
 	auto s = findVertex(origin);
 	s->dist = 0;
+	return s;
+}
+
+template<class T>
+Vertex<T> * Graph<T>::initSingleSourceNegative(const T &origin) {
+	for (auto v : vertexSet) 
+	{
+		v->dist = INF;
+		v->path = nullptr;
+		v->filling = 0;
+	}
+	auto s = findVertex(origin);
+	s->dist = INF/2;
 	return s;
 }
 /**

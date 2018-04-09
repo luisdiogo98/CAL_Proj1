@@ -18,6 +18,6 @@ public:
 	virtual bool isFull() const;
 	virtual bool advanceTime();
 	virtual std::string getColor();
-	virtual double getGarbage(GarbageType tipo);
+	virtual double getGarbage(GarbageType tipo) const;
 	virtual void emptyGarbage();
 };

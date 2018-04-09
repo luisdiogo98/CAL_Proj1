@@ -1,6 +1,5 @@
 #include "Company.h"
 #include "graphviewer.h"
-#include <float.h>
 
 Company::Company(Graph<Landmark*> m)
 {
@@ -147,12 +146,12 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 {
 	vector<Landmark*> res;
 	Vertex<Landmark*>* v;
-	double min_dist = DBL_MAX;
+	double min_dist = INF;
 
 	for (vector<Landmark*>::iterator it = TreatmentStations.begin(); it != TreatmentStations.end(); it++)
 	{
 		auto aux = map.findVertex(*it);
-		if (aux == nullptr || aux->dist == DBL_MAX) // missing or disconnected
+		if (aux == nullptr || aux->dist == INF) // missing or disconnected
 			continue;
 
 		if (aux->dist < min_dist)
@@ -161,6 +160,9 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 			min_dist = aux->dist;
 		}
 	}
+
+	if (min_dist == INF)
+		return res;
 
 	for (; v != nullptr; v = v->path)
 		res.push_back(v->info);
@@ -193,7 +195,7 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 	GarbageType tipo = truck->getType();
 	double capacity = truck->getCapacity();
 
-	auto s = map.initSingleSource(garage);
+	auto s = map.initSingleSourceNegative(garage);
 	MutablePriorityQueue<Vertex<Landmark*>> q;
 	q.insert(s);
 
@@ -205,10 +207,10 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 			auto oldDist = e.dest->dist;
 			if (relaxGarbage(v, e.dest, e.weight, tipo, capacity)) 
 			{
-				if (oldDist == DBL_MAX)
+				if (oldDist == INF)
 					q.insert(e.dest);
-				else
-					q.decreaseKey(e.dest);
+
+				else q.decreaseKey(e.dest);
 			}
 		}
 	}

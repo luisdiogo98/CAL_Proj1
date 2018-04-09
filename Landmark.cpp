@@ -44,7 +44,7 @@ string Landmark::getColor()
 	return "WHITE";
 }
 
-double Landmark::getGarbage(GarbageType tipo)
+double Landmark::getGarbage(GarbageType tipo) const
 {
 	return 0.0;
 }

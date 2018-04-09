@@ -68,7 +68,7 @@ string Container::getColor()
 	}
 }
 
-double Container::getGarbage(GarbageType tipo)
+double Container::getGarbage(GarbageType tipo) const
 {
 	if (isFull() && tipo == type)
 		return filled;
