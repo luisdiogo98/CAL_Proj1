@@ -16,10 +16,10 @@
 
 
 
-const float LAT_MAX = 41.17941;
-const float LAT_MIN = 41.15026;
-const float LON_MAX = -8.635939;
-const float LON_MIN = -8.604123;
+const float LAT_MAX = 41.20324;
+const float LAT_MIN = 41.1698;
+const float LON_MAX = -8.555458;
+const float LON_MIN = -8.622682;
 const int BACKGROUND_X = 1000;
 const int BACKGROUND_Y = 1000;
 

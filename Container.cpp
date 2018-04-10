@@ -25,7 +25,7 @@ bool Container::advanceTime()
 
 bool Container::isFull() const
 {
-	return filled == capacity;
+	return (int)filled == (int)capacity;
 }
 
 void Container::visit()

@@ -3,6 +3,7 @@
 #include "graphviewer.h"
 
 string type_name[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
+int visited = 0;
 
 Company::Company(Graph<Landmark*> m)
 {
@@ -122,7 +123,7 @@ bool Company::relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double we
 vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, GarbageType tipo, double capacity)
 {
 	vector<Landmark*> res;
-	Vertex<Landmark*>* v;
+	Vertex<Landmark*>* v = nullptr;
 	double min_dist = INF;
 
 	for (vector<Landmark*>::iterator it = TreatmentStations.begin(); it != TreatmentStations.end(); it++)
@@ -138,7 +139,7 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 		}
 	}
 
-	if (min_dist == INF)
+	if (v == nullptr || min_dist == INF)
 	{
 		cout << endl << "No way found!" << endl;
 		return res;
