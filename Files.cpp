@@ -16,6 +16,25 @@
 
 
 
+const float LAT_MAX = 41.17941;
+const float LAT_MIN = 41.15026;
+const float LON_MAX = -8.635939;
+const float LON_MIN = -8.604123;
+const int BACKGROUND_X = 1000;
+const int BACKGROUND_Y = 1000;
+
+int longitude_to_x(double l)
+{
+	return floor(((l - LON_MIN) * BACKGROUND_Y) / (LON_MAX - LON_MIN));
+}
+
+int latitude_to_y(double l)
+{
+	return floor(((l - LAT_MIN) * BACKGROUND_X) / (LAT_MAX - LAT_MIN));
+}
+
+
+
 using namespace std;
 
 double deg2rad(double deg) {
@@ -77,16 +96,21 @@ while (!my_nodes.eof())
 {
 	getline(my_nodes, node_line);
 	unsigned long long id;
-	double lat_deg, longe_deg;
+	double lati_deg, longi_deg;
+	int lat_deg, longe_deg;
 
 	stringstream linha_node(node_line);
 	char p_virgula;
 
 	linha_node >> id >> p_virgula;
 
-	linha_node >> lat_deg >> p_virgula;
-	linha_node >> longe_deg >> p_virgula;
+	linha_node >> lati_deg >> p_virgula;
+	linha_node >> longi_deg >> p_virgula;
 	int random = rand() % 1000;
+
+	lat_deg = latitude_to_y(lati_deg);
+	longe_deg = longitude_to_x(longi_deg);
+
 
 	Landmark *info;
 
@@ -224,8 +248,8 @@ while (!my_roads2.eof())
 		dest = map.findVertex(n.find(idnode2)->second);
 
 		Road road_info = r.find(road_id)->second;
-		double dist = haversine_distance(source->getInfo()->getX(), source->getInfo()->getY(), dest->getInfo()->getX(), dest->getInfo()->getY());
-
+		//double dist = haversine_distance(source->getInfo()->getX(), source->getInfo()->getY(), dest->getInfo()->getX(), dest->getInfo()->getY());
+		double dist = sqrt(pow((source->getInfo()->getX() - dest->getInfo()->getX()), 2) + pow((source->getInfo()->getY() - dest->getInfo()->getY()), 2));
 		map.addEdge(source->getInfo(), dest->getInfo(), dist, road_info.getName());
 
 		if (road_info.gettwoways())
@@ -242,14 +266,3 @@ my_roads2.close();
 
 
 }
-
-
-
-
-
-
-
-
-
-
-

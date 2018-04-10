@@ -1,5 +1,8 @@
 #include "Company.h"
+#include "Container.h"
 #include "graphviewer.h"
+
+string type_name[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
 
 Company::Company(Graph<Landmark*> m)
 {
@@ -21,11 +24,6 @@ vector<Landmark*> Company::getTreatmentStations()
 	return TreatmentStations;
 }
 
-vector<Landmark*> Company::getFullContainers()
-{
-	return FullContainers;
-}
-
 vector<Truck*> Company::getTrucks()
 {
 	return Trucks;
@@ -41,26 +39,9 @@ void Company::addTreatmentStation(Landmark * l)
 	TreatmentStations.push_back(l);
 }
 
-void Company::addFullContainer(Landmark * l)
-{
-	FullContainers.push_back(l);
-}
-
 void Company::addTruck(Truck * t)
 {
 	Trucks.push_back(t);
-}
-
-void Company::removeFullContainer(Landmark * l)
-{
-	for (vector<Landmark*>::iterator it = FullContainers.begin(); it != FullContainers.end(); it++)
-	{
-		if (*it == l)
-		{
-			FullContainers.erase(it);
-			return;
-		}
-	}
 }
 
 void Company::removeTruck(Truck * t)
@@ -80,14 +61,13 @@ void Company::showMap() const
 	unsigned int edgeID = 0;
 	//Checkar const em caso de erro
 	GraphViewer *gv = new GraphViewer(1000, 1000, false);
-	gv->setBackground("background.png");
 	gv->createWindow(1000, 1000);
 
 	vector<Vertex<Landmark*>*> vertices = map.getVertexSet();
 
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
-		gv->addNode((*it)->info->getID(), (*it)->info->getX() * 10000 - 41.1 * 10000, (*it)->info->getY() * 10000 + 8.6 * 10000);
+		gv->addNode((*it)->info->getID(), (*it)->info->getX(), (*it)->info->getY());
 
 		gv->setVertexColor((*it)->info->getID(), (*it)->info->getColor());
 		gv->setVertexLabel((*it)->info->getID(), (*it)->info->display());
@@ -215,19 +195,17 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 	return getNearestTreatmentStation(garage, tipo, capacity);
 }
 
-void Company::showWay(std::map<int,Landmark*> way) const
+void Company::showWay(vector<Landmark*> way) const
 {
 	unsigned int edgeID = 0;
-	//Checkar const em caso de erro
 	GraphViewer *gv = new GraphViewer(1000, 1000, false);
-	gv->setBackground("background.png");
 	gv->createWindow(1000, 1000);
 
 	vector<Vertex<Landmark*>*> vertices = map.getVertexSet();
 
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
-		gv->addNode((*it)->info->getID(), (*it)->info->getX() * 10000 - 41.1 * 10000, (*it)->info->getY() * 10000 + 8.6 * 10000);
+		gv->addNode((*it)->info->getID(), (*it)->info->getX(), (*it)->info->getY());
 
 		gv->setVertexColor((*it)->info->getID(), (*it)->info->getColor());
 		gv->setVertexLabel((*it)->info->getID(), (*it)->info->display());
@@ -242,10 +220,16 @@ void Company::showWay(std::map<int,Landmark*> way) const
 			gv->addEdge(edgeID, (*it)->info->getID(), ti->dest->info->getID(), EdgeType::DIRECTED);
 			gv->setEdgeLabel(edgeID, ti->name);
 
-			if (way.find((*it)->info->getID()) != way.end() && way.find(ti->dest->info->getID()) != way.end())
+			for (vector<Landmark*>::const_iterator tri = way.begin(); tri != way.end(); tri++)
 			{
-				gv->setEdgeColor(edgeID, "RED");
-				gv->setEdgeThickness(edgeID, 5);
+				if (tri + 1 == way.end())
+					break;
+
+				if ((*tri)->getID() == (*it)->info->getID() && (*(tri + 1))->getID() == ti->dest->info->getID())
+				{
+					gv->setEdgeColor(edgeID, "RED");
+					gv->setEdgeThickness(edgeID, 5);
+				}
 			}
 
 			edgeID++;
@@ -253,5 +237,30 @@ void Company::showWay(std::map<int,Landmark*> way) const
 	}
 
 	gv->rearrange();
-	free(gv); //Cuidado com este free
+	free(gv);
+}
+
+void Company::displayFullContainers()
+{
+	cout << "Full containers:" << endl << endl;
+
+	int i = 0;
+
+	vector<Vertex<Landmark*>*> v = map.getVertexSet();
+
+
+	for (vector<Vertex<Landmark*>*>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		if ((*it)->getInfo()->isFull())
+		{
+			i++;
+			Container * c = (Container*) (*it)->getInfo();
+			cout << i << ": ID - " << c->getID() << "   Type - " << type_name[c->getType()] << "   Capacity - " << c->getCapacity() << "   Current Load - " << c->getCurrentLoad() << endl;
+		}
+	}
+
+	if (!i)
+		cout << "No full containers." << endl;
+
+	getchar();
 }

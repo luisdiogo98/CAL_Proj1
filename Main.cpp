@@ -4,7 +4,6 @@
 #include "Garage.h"
 #include "Container.h"
 
-
 using namespace std;
 
 string type_names[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
@@ -45,12 +44,7 @@ void sendTruck(Company &c)
 
 	vector<Landmark*> way = c.sendTruck(c.getTrucks().at(choice - 1));
 
-	map<int,Landmark*> theWay;
-
-	for (vector<Landmark*>::iterator it = way.begin(); it != way.end(); it++)
-		theWay.insert(pair<unsigned long long, Landmark*>((*it)->getID(), (*it)));
-
-	c.showWay(theWay);
+	c.showWay(way);
 }
 
 void showGaragesandStations(Company &c)
@@ -97,39 +91,13 @@ void displayTrucks(Company &c)
 	getchar();
 }
 
-
-void displayFullContainers(Company &c)
-{
-	if (c.getFullContainers().size() == 0)
-	{
-		cout << "No full containers." << endl;
-		getchar();
-		return;
-	}
-
-	cout << "Full containers:" << endl << endl;
-
-	vector<Landmark*> cont = c.getFullContainers();
-	int i = 0;
-	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
-	{
-		i++;
-		Container * c = (Container *) (*it);
-		cout << i << ": ID - " << c->getID() << "   Type - " << type_names[c->getType()] << "   Capacity - " << c->getCapacity() << "   Current Load - " << c->getCurrentLoad() << endl;
-	}
-	getchar();
-}
-
 void advanceTime(Company &c)
 {
 	vector<Landmark*> cont = c.getMap().dfs();
+
 	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
-	{
-		if ((*it)->advanceTime())
-		{
-			c.addFullContainer(*it);
-		}
-	}
+		(*it)->advanceTime();
+
 	cout << "Time advanced." << endl << endl;
 }
 
@@ -310,7 +278,7 @@ bool mainMenu(Company &c)
 			}
 			case 4:
 			{
-				displayFullContainers(c);
+				c.displayFullContainers();
 				repeat = false;
 				return true;
 			}
