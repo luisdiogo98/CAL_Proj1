@@ -139,7 +139,10 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 	}
 
 	if (min_dist == INF)
+	{
+		cout << endl << "No way found!" << endl;
 		return res;
+	}
 
 	for (; v != nullptr; v = v->path)
 		res.push_back(v->info);
@@ -162,6 +165,8 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 		}
 	}
 
+	cout << endl << "Garbage Collected: " << filling << endl;
+
 	return res;
 }
 
@@ -172,7 +177,7 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 	GarbageType tipo = truck->getType();
 	double capacity = truck->getCapacity();
 
-	auto s = map.initSingleSourceNegative(garage);
+	auto s = map.initSingleSourceNegative(garage, capacity);
 	MutablePriorityQueue<Vertex<Landmark*>> q;
 	q.insert(s);
 
@@ -218,7 +223,6 @@ void Company::showWay(vector<Landmark*> way) const
 		for (vector<Edge<Landmark*>>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)
 		{
 			gv->addEdge(edgeID, (*it)->info->getID(), ti->dest->info->getID(), EdgeType::DIRECTED);
-			gv->setEdgeLabel(edgeID, ti->name);
 
 			for (vector<Landmark*>::const_iterator tri = way.begin(); tri != way.end(); tri++)
 			{

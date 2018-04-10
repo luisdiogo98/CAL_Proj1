@@ -251,11 +251,7 @@ while (!my_roads2.eof())
 		//double dist = haversine_distance(source->getInfo()->getX(), source->getInfo()->getY(), dest->getInfo()->getX(), dest->getInfo()->getY());
 		double dist = sqrt(pow((source->getInfo()->getX() - dest->getInfo()->getX()), 2) + pow((source->getInfo()->getY() - dest->getInfo()->getY()), 2));
 		map.addEdge(source->getInfo(), dest->getInfo(), dist, road_info.getName());
-
-		if (road_info.gettwoways())
-		{
-			map.addEdge(dest->getInfo(), source->getInfo(), dist, road_info.getName());
-		}
+		map.addEdge(dest->getInfo(), source->getInfo(), dist, road_info.getName());
 
 
 }
