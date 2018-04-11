@@ -1,11 +1,4 @@
-
-
-
 #include "Road_temp.h"
-
-
-
-
 
 Road::Road()
 {

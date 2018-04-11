@@ -16,6 +16,7 @@ private:
 	vector<Landmark*> getNearestTreatmentStation(Landmark *garage, GarbageType tipo, double capacity);
 public:
 	Company(Graph<Landmark*> m);
+	~Company();
 	Graph<Landmark*> getMap();
 	vector<Landmark*> getGarages();
 	vector<Landmark*> getTreatmentStations();
@@ -25,11 +26,15 @@ public:
 	void addTruck(Truck* t);
 	void removeTruck(Truck* t);
 	void showMap() const;
-	void Trata_fich_roads(string text_line);
 	void read_files();
-	void Trata_fich_nodes(string text_lines);
 	void fixIndex();
 	vector<Landmark*> sendTruck(Truck* truck);
 	void showWay(vector<Landmark*> way) const;
 	void displayFullContainers();
+	void addTruck();
+	void removeTruck();
+	void advanceTime();
+	void displayTrucks();
+	void showGaragesandStations();
+	void sendTruck();
 };

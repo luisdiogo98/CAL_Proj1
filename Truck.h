@@ -3,9 +3,6 @@
 #include "Graph.h"
 #include "Landmark.h"
 
-
-
-
 class Truck
 {
 private:

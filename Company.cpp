@@ -1,4 +1,5 @@
 #include "Company.h"
+#include "Garage.h"
 #include "Container.h"
 #include "graphviewer.h"
 
@@ -8,6 +9,20 @@ int visited = 0;
 Company::Company(Graph<Landmark*> m)
 {
 	map = m;
+}
+
+Company::~Company()
+{
+	vector<Vertex<Landmark*>*> pontos = map.getVertexSet();
+
+	for (vector<Vertex<Landmark*>*>::iterator it = pontos.begin(); it != pontos.end(); it++)
+	{
+		delete((*it)->info);
+		delete(*it);
+	}
+
+	for (vector<Truck*>::iterator it = Trucks.begin(); it != Trucks.end(); it++)
+		delete(*it);
 }
 
 Graph<Landmark*> Company::getMap()
@@ -60,7 +75,6 @@ void Company::removeTruck(Truck * t)
 void Company::showMap() const
 {
 	unsigned int edgeID = 0;
-	//Checkar const em caso de erro
 	GraphViewer *gv = new GraphViewer(1000, 1000, false);
 	gv->createWindow(1000, 1000);
 
@@ -87,7 +101,7 @@ void Company::showMap() const
 	}
 
 	gv->rearrange();
-	free(gv); //Cuidado com este free
+	free(gv);
 }
 
 void Company::fixIndex()
@@ -106,13 +120,29 @@ bool Company::relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double we
 {
 	double garbage = w->info->getGarbage(tipo);
 
-	if (garbage + v->filling > capacity)
-		garbage = 0;
-
-	if (v->dist + weight - garbage < w->dist) 
+	if (garbage)
 	{
-		w->dist = v->dist + weight - garbage;
-		w->path = v;
+		if (garbage + v->filling > capacity)
+			garbage = 0;
+
+		else
+		{
+			vector<Landmark*> oldpath = v->fullpath;
+
+			for (vector<Landmark*>::iterator it = oldpath.begin(); it != oldpath.end(); it++)
+				if ((*it)->getID() == w->info->getID())
+				{
+					garbage = 0;
+					break;
+				}
+		}
+	}
+
+	if (v->dist + weight - (garbage * 10) < w->dist)
+	{
+		w->dist = v->dist + weight - (garbage * 10);
+		w->fullpath = v->fullpath;
+		w->fullpath.push_back(v->info);
 		w->filling = v->filling + garbage;
 		return true;
 	}
@@ -123,7 +153,7 @@ bool Company::relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double we
 vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, GarbageType tipo, double capacity)
 {
 	vector<Landmark*> res;
-	Vertex<Landmark*>* v = nullptr;
+	Vertex<Landmark*>* v;
 	double min_dist = INF;
 
 	for (vector<Landmark*>::iterator it = TreatmentStations.begin(); it != TreatmentStations.end(); it++)
@@ -145,10 +175,8 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 		return res;
 	}
 
-	for (; v != nullptr; v = v->path)
-		res.push_back(v->info);
-
-	reverse(res.begin(), res.end());
+	res = v->fullpath;
+	res.push_back(v->info);
 
 	double filling = 0;
 
@@ -171,24 +199,23 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 	return res;
 }
 
-
 vector<Landmark*> Company::sendTruck(Truck* truck)
 {
 	Landmark* garage = truck->getGarage();
 	GarbageType tipo = truck->getType();
 	double capacity = truck->getCapacity();
 
-	auto s = map.initSingleSourceNegative(garage, capacity);
+	auto s = map.initSingleSourceNegative(garage);
 	MutablePriorityQueue<Vertex<Landmark*>> q;
 	q.insert(s);
 
-	while (!q.empty()) 
+	while (!q.empty())
 	{
 		auto v = q.extractMin();
-		for (auto e : v->adj) 
+		for (auto e : v->adj)
 		{
 			auto oldDist = e.dest->dist;
-			if (relaxGarbage(v, e.dest, e.weight, tipo, capacity)) 
+			if (relaxGarbage(v, e.dest, e.weight, tipo, capacity))
 			{
 				if (oldDist == INF)
 					q.insert(e.dest);
@@ -253,13 +280,12 @@ void Company::displayFullContainers()
 
 	vector<Vertex<Landmark*>*> v = map.getVertexSet();
 
-
 	for (vector<Vertex<Landmark*>*>::iterator it = v.begin(); it != v.end(); it++)
 	{
 		if ((*it)->getInfo()->isFull())
 		{
 			i++;
-			Container * c = (Container*) (*it)->getInfo();
+			Container * c = (Container*)(*it)->getInfo();
 			cout << i << ": ID - " << c->getID() << "   Type - " << type_name[c->getType()] << "   Capacity - " << c->getCapacity() << "   Current Load - " << c->getCurrentLoad() << endl;
 		}
 	}
@@ -268,4 +294,214 @@ void Company::displayFullContainers()
 		cout << "No full containers." << endl;
 
 	getchar();
+}
+
+void Company::addTruck()
+{
+	Truck* t;
+	GarbageType tt;
+	float capacity;
+	Landmark* g;
+
+	cout << "Choose truck type:" << endl;
+	cout << "1 - INDISCRIMINATED" << endl;
+	cout << "2 - PLASTIC" << endl;
+	cout << "3 - PAPER" << endl;
+	cout << "4 - GLASS" << endl;
+
+	int choice;
+	cin >> choice;
+
+	while (cin.fail() || choice < 1 || choice > 4)
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Insert a valid option." << endl;
+		cin >> choice;
+	}
+
+	switch (choice)
+	{
+	case 1:
+	{
+		tt = INDISCRIMINATED;
+		break;
+	}
+	case 2:
+	{
+		tt = PLASTIC;
+		break;
+	}
+	case 3:
+	{
+		tt = PAPER;
+		break;
+	}
+	case 4:
+	{
+		tt = GLASS;
+		break;
+	}
+	}
+
+	cout << endl << "Insert truck capacity: ";
+	cin >> capacity;
+
+	while (cin.fail())
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Insert a valid option." << endl;
+		cin >> capacity;
+	}
+
+	cout << endl << "Available garages:" << endl;
+
+	int i = 0;
+	for (vector<Landmark*>::iterator it = Garages.begin(); it != Garages.end(); it++)
+	{
+		i++;
+		cout << i << ": ID - " << (*it)->getID() << endl;
+	}
+
+	cin >> choice;
+
+	while (cin.fail() || choice < 1 || choice > i)
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Insert a valid option." << endl;
+		cin >> choice;
+	}
+
+	g = Garages.at(choice - 1);
+	t = new Truck(tt, capacity, g);
+	((Garage *)Garages.at(choice - 1))->addTruck(t);
+	addTruck(t);
+}
+
+void Company::removeTruck()
+{
+	if (Trucks.size() == 0)
+	{
+		cout << "No available trucks. Press ENTER to continue." << endl;
+		getchar();
+		return;
+	}
+
+	cout << "Avaliable trucks:" << endl << endl;
+
+	int i = 0;
+	for (vector<Truck*>::iterator it = Trucks.begin(); it != Trucks.end(); it++)
+	{
+		i++;
+		cout << i << ": Type - " << type_name[(*it)->getType()] << "   Capacity - " << (*it)->getCapacity() << "   Garage - " << (*it)->getGarage()->getID() << endl;
+	}
+
+	cout << endl << "Select truck to remove (0 to cancel): ";
+	int choice;
+	cin >> choice;
+
+	while (cin.fail() || choice < 0 || choice > i)
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Insert a valid option." << endl;
+		cin >> choice;
+	}
+
+	if (choice == 0)
+		return;
+
+	((Garage *)Trucks.at(choice - 1)->getGarage())->removeTruck((Trucks.at(choice - 1)));
+	removeTruck(Trucks.at(choice - 1));
+}
+
+void Company::advanceTime()
+{
+	vector<Landmark*> cont = map.dfs();
+
+	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
+		(*it)->advanceTime();
+
+	cout << "Time advanced." << endl << endl;
+}
+
+void Company::displayTrucks()
+{
+	if (Trucks.size() == 0)
+	{
+		cout << "No available trucks." << endl;
+		getchar();
+		return;
+	}
+
+	cout << "Avaliable trucks:" << endl << endl;
+
+	int i = 0;
+	for (vector<Truck*>::iterator it = Trucks.begin(); it != Trucks.end(); it++)
+	{
+		i++;
+		cout << i << ": Type - " << type_name[(*it)->getType()] << "   Capacity - " << (*it)->getCapacity() << "   Garage - " << (*it)->getGarage()->getID() << endl;
+	}
+	getchar();
+}
+
+void Company::showGaragesandStations()
+{
+	cout << endl << "Available garages:" << endl;
+
+	int i = 0;
+	for (vector<Landmark*>::iterator it = Garages.begin(); it != Garages.end(); it++)
+	{
+		i++;
+		cout << i << ": ID - " << (*it)->getID() << endl;
+	}
+
+	cout << endl << "Available treatment stations:" << endl;
+
+	i = 0;
+	for (vector<Landmark*>::iterator it = TreatmentStations.begin(); it != TreatmentStations.end(); it++)
+	{
+		i++;
+		cout << i << ": ID - " << (*it)->getID() << endl;
+	}
+}
+
+void Company::sendTruck()
+{
+	if (Trucks.size() == 0)
+	{
+		cout << "No available trucks." << endl;
+		getchar();
+		return;
+	}
+
+	cout << "Avaliable trucks:" << endl << endl;
+
+	int i = 0;
+	for (vector<Truck*>::iterator it = Trucks.begin(); it != Trucks.end(); it++)
+	{
+		i++;
+		cout << i << ": Type - " << type_name[(*it)->getType()] << "   Capacity - " << (*it)->getCapacity() << "   Garage - " << (*it)->getGarage()->getID() << endl;
+	}
+
+	cout << endl << "Select truck to send (0 to cancel): ";
+	int choice;
+	cin >> choice;
+
+	while (cin.fail() || choice < 0 || choice > i)
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "Insert a valid option." << endl;
+		cin >> choice;
+	}
+
+	if (choice == 0)
+		return;
+
+	vector<Landmark*> way = sendTruck(Trucks.at(choice - 1));
+
+	showWay(way);
 }

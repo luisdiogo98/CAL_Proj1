@@ -2,10 +2,7 @@
 
 using namespace std;
 
-Garage::Garage(int id, double x, double y) : Landmark(id, x, y)
-{
-	
-}
+Garage::Garage(int id, double x, double y) : Landmark(id, x, y){}
 
 Garage::Garage(int id, double x, double y, vector<Truck*> tr) : Landmark(id, x, y)
 {

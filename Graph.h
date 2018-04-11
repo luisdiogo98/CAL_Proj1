@@ -29,6 +29,7 @@ class Vertex {
 	bool visited;          // auxiliary field
 	double dist = 0;
 	Vertex<T> *path = NULL;
+	vector<T> fullpath;
 	double filling = 0; 
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 
@@ -124,7 +125,7 @@ public:
 	void dijkstraShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
 	Vertex<T> * initSingleSource(const T &origin);
-	Vertex<T> * initSingleSourceNegative(const T &origin, double capacity);
+	Vertex<T> * initSingleSourceNegative(const T &origin);
 	bool relax(Vertex<T> *v, Vertex<T> *w, double weight);
 
 	void dfsVisit(Vertex<T> *v, vector<T> & res) const;
@@ -376,15 +377,15 @@ Vertex<T> * Graph<T>::initSingleSource(const T &origin) {
 }
 
 template<class T>
-Vertex<T> * Graph<T>::initSingleSourceNegative(const T &origin, double capacity) {
+Vertex<T> * Graph<T>::initSingleSourceNegative(const T &origin) {
 	for (auto v : vertexSet) 
 	{
 		v->dist = INF;
-		v->path = nullptr;
+		v->fullpath.clear();
 		v->filling = 0;
 	}
 	auto s = findVertex(origin);
-	s->dist = INF / 2;
+	s->dist = INF/2;
 	return s;
 }
 /**
