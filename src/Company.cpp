@@ -90,12 +90,12 @@ void Company::showMap() const
 
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
-		vector<Edge<Landmark*>> edges = (*it)->adj;
+		vector<Edge<Landmark*>*> edges = (*it)->outgoing;
 
-		for (vector<Edge<Landmark*>>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)
+		for (vector<Edge<Landmark*>*>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)
 		{
-			gv->addEdge(edgeID, (*it)->info->getID(), ti->dest->info->getID(), EdgeType::DIRECTED);
-			gv->setEdgeLabel(edgeID, ti->name);
+			gv->addEdge(edgeID, (*it)->info->getID(), (*ti)->dest->info->getID(), EdgeType::DIRECTED);
+			gv->setEdgeLabel(edgeID, (*ti)->name);
 			edgeID++;
 		}
 	}
@@ -212,15 +212,15 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 	while (!q.empty())
 	{
 		auto v = q.extractMin();
-		for (auto e : v->adj)
+		for (auto e : v->outgoing)
 		{
-			auto oldDist = e.dest->dist;
-			if (relaxGarbage(v, e.dest, e.weight, tipo, capacity))
+			auto oldDist = e->dest->dist;
+			if (relaxGarbage(v, e->dest, e->weight, tipo, capacity))
 			{
 				if (oldDist == INF)
-					q.insert(e.dest);
+					q.insert(e->dest);
 
-				else q.decreaseKey(e.dest);
+				else q.decreaseKey(e->dest);
 			}
 		}
 	}
@@ -246,18 +246,18 @@ void Company::showWay(vector<Landmark*> way) const
 
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
-		vector<Edge<Landmark*>> edges = (*it)->adj;
+		vector<Edge<Landmark*>*> edges = (*it)->outgoing;
 
-		for (vector<Edge<Landmark*>>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)
+		for (vector<Edge<Landmark*>*>::const_iterator ti = edges.begin(); ti != edges.end(); ti++)
 		{
-			gv->addEdge(edgeID, (*it)->info->getID(), ti->dest->info->getID(), EdgeType::DIRECTED);
+			gv->addEdge(edgeID, (*it)->info->getID(), (*ti)->dest->info->getID(), EdgeType::DIRECTED);
 
 			for (vector<Landmark*>::const_iterator tri = way.begin(); tri != way.end(); tri++)
 			{
 				if (tri + 1 == way.end())
 					break;
 
-				if ((*tri)->getID() == (*it)->info->getID() && (*(tri + 1))->getID() == ti->dest->info->getID())
+				if ((*tri)->getID() == (*it)->info->getID() && (*(tri + 1))->getID() == (*ti)->dest->info->getID())
 				{
 					gv->setEdgeColor(edgeID, "RED");
 					gv->setEdgeThickness(edgeID, 5);
