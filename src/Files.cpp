@@ -132,7 +132,7 @@ void Company::read_files() {
 
 		n.insert(std::pair<unsigned long long, Landmark*>(id, info));
 
-		map.addVertex(info);
+		mapa.addVertex(info);
 	}
 
 	my_nodes.close();
@@ -220,13 +220,13 @@ void Company::read_files() {
 		Vertex<Landmark*>* source;
 		Vertex<Landmark*>* dest;
 
-		source = map.findVertex(n.find(idnode1)->second);
-		dest = map.findVertex(n.find(idnode2)->second);
+		source = mapa.findVertex(n.find(idnode1)->second);
+		dest = mapa.findVertex(n.find(idnode2)->second);
 
 		Road road_info = r.find(road_id)->second;
 		double dist = sqrt(pow((source->getInfo()->getX() - dest->getInfo()->getX()), 2) + pow((source->getInfo()->getY() - dest->getInfo()->getY()), 2));
-		map.addEdge(source->getInfo(), dest->getInfo(), dist, road_info.getName());
-		map.addEdge(dest->getInfo(), source->getInfo(), dist, road_info.getName());
+		mapa.addEdge(source->getInfo(), dest->getInfo(), dist, road_info.getName());
+		mapa.addEdge(dest->getInfo(), source->getInfo(), dist, road_info.getName());
 	}
 
 	my_roads2.close();

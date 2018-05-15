@@ -100,11 +100,11 @@ string Container::print() const
 	}
 	else if (type == PAPER)
 	{
-		return "Paper";
+		ans = "Paper";
 	}
 	else
 	{
-		return "Glass";
+		ans = "Glass";
 	}
 
 	ans += " Container";

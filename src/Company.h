@@ -8,7 +8,7 @@
 class Company
 {
 private:
-	Graph<Landmark*> map;
+	Graph<Landmark*> mapa;
 	vector<Landmark*> Garages;
 	vector<Landmark*> TreatmentStations;
 	vector<Truck*> Trucks;
@@ -41,4 +41,5 @@ public:
 	void sendTruck();
 	void searchContainer(string name1, string name2);
 	void searchExactContainer();
+	void searchApproximateContainer();
 };

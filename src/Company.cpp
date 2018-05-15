@@ -2,20 +2,22 @@
 #include "Garage.h"
 #include "Container.h"
 #include "graphviewer.h"
+#include <map>
 
 int kmpMatcher(string text, string pattern);
+int editDistance(string pattern, string text);
 
 string type_name[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
 int visited = 0;
 
 Company::Company(Graph<Landmark*> m)
 {
-	map = m;
+	mapa = m;
 }
 
 Company::~Company()
 {
-	vector<Vertex<Landmark*>*> pontos = map.getVertexSet();
+	vector<Vertex<Landmark*>*> pontos = mapa.getVertexSet();
 
 	for (vector<Vertex<Landmark*>*>::iterator it = pontos.begin(); it != pontos.end(); it++)
 	{
@@ -29,7 +31,7 @@ Company::~Company()
 
 Graph<Landmark*> Company::getMap()
 {
-	return map;
+	return mapa;
 }
 
 vector<Landmark*> Company::getGarages()
@@ -80,7 +82,7 @@ void Company::showMap() const
 	GraphViewer *gv = new GraphViewer(1000, 1000, false);
 	gv->createWindow(1000, 1000);
 
-	vector<Vertex<Landmark*>*> vertices = map.getVertexSet();
+	vector<Vertex<Landmark*>*> vertices = mapa.getVertexSet();
 
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
@@ -109,7 +111,7 @@ void Company::showMap() const
 void Company::fixIndex()
 {
 	int i = 0;
-	vector<Vertex<Landmark*>*> v = map.getVertexSet();
+	vector<Vertex<Landmark*>*> v = mapa.getVertexSet();
 
 	for (vector<Vertex<Landmark*>*>::iterator it = v.begin(); it != v.end(); it++)
 	{
@@ -160,7 +162,7 @@ vector<Landmark*> Company::getNearestTreatmentStation(Landmark * garage, Garbage
 
 	for (vector<Landmark*>::iterator it = TreatmentStations.begin(); it != TreatmentStations.end(); it++)
 	{
-		auto aux = map.findVertex(*it);
+		auto aux = mapa.findVertex(*it);
 		if (aux == nullptr || aux->dist == INF) // missing or disconnected
 			continue;
 
@@ -207,7 +209,7 @@ vector<Landmark*> Company::sendTruck(Truck* truck)
 	GarbageType tipo = truck->getType();
 	double capacity = truck->getCapacity();
 
-	auto s = map.initSingleSourceNegative(garage);
+	auto s = mapa.initSingleSourceNegative(garage);
 	MutablePriorityQueue<Vertex<Landmark*>> q;
 	q.insert(s);
 
@@ -236,7 +238,7 @@ void Company::showWay(vector<Landmark*> way) const
 	GraphViewer *gv = new GraphViewer(1000, 1000, false);
 	gv->createWindow(1000, 1000);
 
-	vector<Vertex<Landmark*>*> vertices = map.getVertexSet();
+	vector<Vertex<Landmark*>*> vertices = mapa.getVertexSet();
 
 	for (vector<Vertex<Landmark*>*>::const_iterator it = vertices.begin(); it != vertices.end(); it++)
 	{
@@ -280,7 +282,7 @@ void Company::displayFullContainers()
 
 	int i = 0;
 
-	vector<Vertex<Landmark*>*> v = map.getVertexSet();
+	vector<Vertex<Landmark*>*> v = mapa.getVertexSet();
 
 	for (vector<Vertex<Landmark*>*>::iterator it = v.begin(); it != v.end(); it++)
 	{
@@ -421,7 +423,7 @@ void Company::removeTruck()
 
 void Company::advanceTime()
 {
-	vector<Landmark*> cont = map.dfs();
+	vector<Landmark*> cont = mapa.dfs();
 
 	for (vector<Landmark*>::iterator it = cont.begin(); it != cont.end(); it++)
 		(*it)->advanceTime();
@@ -511,7 +513,7 @@ void Company::sendTruck()
 void Company::searchContainer(string name1, string name2)
 {
 	bool found = false;
-	for (auto v : map.vertexSet)
+	for (auto v : mapa.vertexSet)
 		for (auto e1 : v->incoming)
 			if (e1->name == name1)
 				for (auto e2 : v->incoming)
@@ -560,4 +562,25 @@ void Company::searchExactContainer()
 	for (auto name1 : match1)
 		for (auto name2 : match2)
 			searchContainer(name1, name2);
+}
+
+void Company::searchApproximateContainer()
+{
+	string street1, street2;
+	cout << "Insert first street name: ";
+	getline(cin, street1);
+	cout << "Insert second street name: ";
+	getline(cin, street2);
+
+	map<int, string> match1;
+	map<int, string> match2;
+
+	for (auto nome : streetNames)
+	{
+		match1.insert(pair<int, string>(editDistance(nome, street1), nome));
+		match2.insert(pair<int, string>(editDistance(nome, street2), nome));
+	}
+
+	cout << "Closest match " << (*match1.begin()).second << " and " << (*match2.begin()).second << endl;
+	getchar();
 }
