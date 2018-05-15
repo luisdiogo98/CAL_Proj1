@@ -187,6 +187,9 @@ void Company::read_files() {
 
 		Road road = Road(road_id, nome, dois_sentidos);
 		r.insert(std::pair<unsigned long long, Road>(road_id, road));
+
+		if (nome != "")
+			streetNames.insert(nome);
 	}
 
 	my_roads.close();

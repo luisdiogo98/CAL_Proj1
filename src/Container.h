@@ -22,4 +22,5 @@ public:
 	double getGarbage(GarbageType type) const;
 	void emptyGarbage();
 	string display() const;
+	string print() const;
 };

@@ -9,4 +9,5 @@ public:
 	TreatmentStation(int id, double x, double y);
 	string getColor();
 	string display() const;
+	string print() const;
 };

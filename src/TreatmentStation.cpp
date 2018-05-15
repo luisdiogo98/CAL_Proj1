@@ -13,3 +13,8 @@ string TreatmentStation::display() const
 {
 	return "Station";
 }
+
+string TreatmentStation::print() const
+{
+	return "Treatment Station";
+}

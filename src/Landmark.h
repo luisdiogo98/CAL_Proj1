@@ -21,4 +21,5 @@ public:
 	virtual double getGarbage(GarbageType tipo) const;
 	virtual void emptyGarbage();
 	virtual std::string display() const;
+	virtual std::string print() const;
 };

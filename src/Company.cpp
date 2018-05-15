@@ -3,6 +3,8 @@
 #include "Container.h"
 #include "graphviewer.h"
 
+int kmpMatcher(string text, string pattern);
+
 string type_name[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
 int visited = 0;
 
@@ -504,4 +506,58 @@ void Company::sendTruck()
 	vector<Landmark*> way = sendTruck(Trucks.at(choice - 1));
 
 	showWay(way);
+}
+
+void Company::searchContainer(string name1, string name2)
+{
+	bool found = false;
+	for (auto v : map.vertexSet)
+		for (auto e1 : v->incoming)
+			if (e1->name == name1)
+				for (auto e2 : v->incoming)
+					if (e2->name == name2)
+					{
+						found = true;
+						cout << v->info->print() << " found at intersection between " << name1 << " and " << name2 << endl;
+					}
+
+	if (!found)
+		cout << "No intersection between " << name1 << " and " << name2 << endl;
+}
+
+void Company::searchExactContainer()
+{
+	string street1, street2;
+	cout << "Insert first street name: ";
+	getline(cin, street1);
+	cout << "Insert second street name: ";
+	getline(cin, street2);
+
+	vector<string> match1;
+	vector<string> match2;
+
+	for (auto nome : streetNames)
+	{
+		if (kmpMatcher(nome, street1))
+			match1.push_back(nome);
+
+		if (kmpMatcher(nome, street2))
+			match2.push_back(nome);
+	}
+
+	if (match1.empty())
+		cout << "Could not find " << street1 << ".\n";
+
+	if (match2.empty())
+		cout << "Could not find " << street2 << ".\n";
+
+	if (match1.empty() || match2.empty())
+	{
+		getchar();
+		return;
+	}
+
+	for (auto name1 : match1)
+		for (auto name2 : match2)
+			searchContainer(name1, name2);
 }

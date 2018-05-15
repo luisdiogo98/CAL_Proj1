@@ -22,7 +22,8 @@ bool mainMenu(Company &c)
 	cout << "6 - Add Trucks" << endl;
 	cout << "7 - Remove Trucks" << endl;
 	cout << "8 - Send Truck" << endl;
-	cout << "9 - Exit" << endl;
+	cout << "9 - Search Container" << endl;
+	cout << "0 - Exit" << endl;
 
 	while (repeat)
 	{
@@ -90,6 +91,12 @@ bool mainMenu(Company &c)
 				return true;
 			}
 			case 9:
+			{
+				c.searchExactContainer();
+				repeat = false;
+				return true;
+			}
+			case 0:
 			{
 				return false;
 			}

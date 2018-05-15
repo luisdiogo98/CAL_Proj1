@@ -19,4 +19,5 @@ public:
 	bool removeTruck(Truck * tr);
 	string getColor();
 	string display() const;
+	string print() const;
 };

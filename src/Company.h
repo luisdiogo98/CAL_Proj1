@@ -3,6 +3,7 @@
 #include "Landmark.h"
 #include "Graph.h"
 #include "Truck.h"
+#include <set>
 
 class Company
 {
@@ -11,6 +12,7 @@ private:
 	vector<Landmark*> Garages;
 	vector<Landmark*> TreatmentStations;
 	vector<Truck*> Trucks;
+	set<string> streetNames;
 
 	bool relaxGarbage(Vertex<Landmark*> *v, Vertex<Landmark*> *w, double weight, GarbageType tipo, double capacity);
 	vector<Landmark*> getNearestTreatmentStation(Landmark *garage, GarbageType tipo, double capacity);
@@ -37,4 +39,6 @@ public:
 	void displayTrucks();
 	void showGaragesandStations();
 	void sendTruck();
+	void searchContainer(string name1, string name2);
+	void searchExactContainer();
 };

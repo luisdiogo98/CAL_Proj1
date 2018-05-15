@@ -85,3 +85,29 @@ string Container::display() const
 {
 	return to_string((int)filled) + " / " + to_string((int)capacity);
 }
+
+string Container::print() const
+{
+	string ans;
+
+	if (type == INDISCRIMINATED)
+	{
+		ans = "Indiscriminated";
+	}
+	else if (type == PLASTIC)
+	{
+		ans = "Plastic";
+	}
+	else if (type == PAPER)
+	{
+		return "Paper";
+	}
+	else
+	{
+		return "Glass";
+	}
+
+	ans += " Container";
+
+	return ans;
+}

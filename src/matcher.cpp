@@ -8,7 +8,7 @@
 #include <vector>
 #include <iostream>
 
-#define MAX_LENGTH 25
+#define MAX_LENGTH 100
 
 using namespace std;
 

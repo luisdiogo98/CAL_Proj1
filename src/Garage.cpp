@@ -53,3 +53,8 @@ string Garage::display() const
 {
 	return "Garage";
 }
+
+string Garage::print() const
+{
+	return "Garage";
+}

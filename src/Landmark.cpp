@@ -55,3 +55,8 @@ string Landmark::display() const
 {
 	return "*";
 }
+
+string Landmark::print() const
+{
+	return "Nothing";
+}
