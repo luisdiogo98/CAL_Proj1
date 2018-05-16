@@ -22,6 +22,10 @@ Company::~Company()
 	for (vector<Vertex<Landmark*>*>::iterator it = pontos.begin(); it != pontos.end(); it++)
 	{
 		delete((*it)->info);
+		for (vector<Edge<Landmark*>*>::iterator ti = (*it)->outgoing.begin(); ti != (*it)->outgoing.end(); ti++)
+		{
+			delete (*ti);
+		}
 		delete(*it);
 	}
 
@@ -562,6 +566,8 @@ void Company::searchExactContainer()
 	for (auto name1 : match1)
 		for (auto name2 : match2)
 			searchContainer(name1, name2);
+
+	getchar();
 }
 
 void Company::searchApproximateContainer()
@@ -581,6 +587,50 @@ void Company::searchApproximateContainer()
 		match2.insert(pair<int, string>(editDistance(nome, street2), nome));
 	}
 
-	cout << "Closest match " << (*match1.begin()).second << " and " << (*match2.begin()).second << endl;
+	vector<string> options1;
+	vector<string> options2;
+
+	map<int, string>::iterator it = match1.begin();
+	int i = 0;
+
+	cout << "Closest matches to " << street1 << " are:\n";
+
+	for (; i < 5 && it != match1.end(); i++, it++)
+	{
+		cout << i + 1 << ". " << (*it).second << endl;
+		options1.push_back((*it).second);
+	}
+
+	cout << "Input your option: (invalid inputs will lead you to the main menu)\n";
+	
+	int option;
+	cin >> option;
+
+	if (option > i || option <= 0)
+		return;
+
+	string want1 = options1[option - 1];
+
+	it = match2.begin();
+	i = 0;
+
+	cout << "Closest matches to " << street2 << " are:\n";
+
+	for (; i < 5 && it != match2.end(); i++, it++)
+	{
+		cout << i + 1 << ". " << (*it).second << endl;
+		options2.push_back((*it).second);
+	}
+
+	cout << "Input your option: (invalid inputs will lead you to the main menu)\n";
+	cin >> option;
+
+	if (option > i || option <= 0)
+		return;
+
+	string want2 = options2[option - 1];
+
+	searchContainer(want1, want2);
+
 	getchar();
 }
