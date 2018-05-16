@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <iterator>
 
 #define MAX_LENGTH 100
 
@@ -152,4 +153,31 @@ float numApproximateStringMatching(string filename,string toSearch)
 	}
 
 	return dist/words;
+}
+
+int editStreetDistance(string pattern, string text)
+{
+	stringstream ssp(pattern);
+	istream_iterator<string> beginp(ssp);
+	istream_iterator<string> endp;
+	vector<string> patternwords(beginp, endp);
+
+	stringstream sst(text);
+	istream_iterator<string> begint(sst);
+	istream_iterator<string> endt;
+	vector<string> textwords(begint, endt);
+
+	int distance = 0;
+
+	for (int i = 0; i < patternwords.size(); i++)
+	{
+		int mindist = INT_MAX;
+
+		for (int j = 0; j < textwords.size(); j++)
+			mindist = min(mindist,editDistance(patternwords[i], textwords[j]));
+
+		distance += mindist;
+	}
+
+	return distance;
 }

@@ -5,7 +5,7 @@
 #include <map>
 
 int kmpMatcher(string text, string pattern);
-int editDistance(string pattern, string text);
+int editStreetDistance(string pattern, string text);
 
 string type_name[] = { "INDISCRIMINATED", "PLASTIC", "PAPER", "GLASS" };
 int visited = 0;
@@ -583,8 +583,8 @@ void Company::searchApproximateContainer()
 
 	for (auto nome : streetNames)
 	{
-		match1.insert(pair<int, string>(editDistance(nome, street1), nome));
-		match2.insert(pair<int, string>(editDistance(nome, street2), nome));
+		match1.insert(pair<int, string>(editStreetDistance(street1, nome), nome));
+		match2.insert(pair<int, string>(editStreetDistance(street2, nome), nome));
 	}
 
 	vector<string> options1;
