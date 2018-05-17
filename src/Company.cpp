@@ -573,13 +573,13 @@ void Company::searchExactContainer()
 void Company::searchApproximateContainer()
 {
 	string street1, street2;
-	cout << "Insert first street name: ";
+	cout << "\nInsert first street name: ";
 	getline(cin, street1);
-	cout << "Insert second street name: ";
+	cout << "\nInsert second street name: ";
 	getline(cin, street2);
 
-	map<int, string> match1;
-	map<int, string> match2;
+	multimap<int, string> match1;
+	multimap<int, string> match2;
 
 	for (auto nome : streetNames)
 	{
@@ -590,10 +590,10 @@ void Company::searchApproximateContainer()
 	vector<string> options1;
 	vector<string> options2;
 
-	map<int, string>::iterator it = match1.begin();
+	multimap<int, string>::iterator it = match1.begin();
 	int i = 0;
 
-	cout << "Closest matches to " << street1 << " are:\n";
+	cout << "\nClosest matches to " << street1 << " are:\n";
 
 	for (; i < 5 && it != match1.end(); i++, it++)
 	{
@@ -601,7 +601,7 @@ void Company::searchApproximateContainer()
 		options1.push_back((*it).second);
 	}
 
-	cout << "Input your option: (invalid inputs will lead you to the main menu)\n";
+	cout << "\nInput your option: (invalid inputs will lead you to the main menu)\n";
 	
 	int option;
 	cin >> option;
@@ -614,7 +614,7 @@ void Company::searchApproximateContainer()
 	it = match2.begin();
 	i = 0;
 
-	cout << "Closest matches to " << street2 << " are:\n";
+	cout << "\nClosest matches to " << street2 << " are:\n";
 
 	for (; i < 5 && it != match2.end(); i++, it++)
 	{
@@ -622,7 +622,7 @@ void Company::searchApproximateContainer()
 		options2.push_back((*it).second);
 	}
 
-	cout << "Input your option: (invalid inputs will lead you to the main menu)\n";
+	cout << "\nInput your option: (invalid inputs will lead you to the main menu)\n";
 	cin >> option;
 
 	if (option > i || option <= 0)
@@ -630,7 +630,11 @@ void Company::searchApproximateContainer()
 
 	string want2 = options2[option - 1];
 
+	cout << endl;
 	searchContainer(want1, want2);
+
+	string waste;
+	getline(cin,waste);
 
 	getchar();
 }

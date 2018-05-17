@@ -14,17 +14,17 @@ bool mainMenu(Company &c)
 	cout << "------------------------------" << endl;
 	cout << "------------|MENU|------------" << endl;
 	cout << "------------------------------" << endl;
-	cout << "1 - Advance Time" << endl;
-	cout << "2 - Available Garages and Treatment Stations" << endl;
-	cout << "3 - Available Trucks" << endl;
-	cout << "4 - Full Containers" << endl;
-	cout << "5 - Map" << endl;
-	cout << "6 - Add Trucks" << endl;
-	cout << "7 - Remove Trucks" << endl;
-	cout << "8 - Send Truck" << endl;
-	cout << "9 - Exact Search Container" << endl;
+	cout << "1  - Advance Time" << endl;
+	cout << "2  - Available Garages and Treatment Stations" << endl;
+	cout << "3  - Available Trucks" << endl;
+	cout << "4  - Full Containers" << endl;
+	cout << "5  - Map" << endl;
+	cout << "6  - Add Trucks" << endl;
+	cout << "7  - Remove Trucks" << endl;
+	cout << "8  - Send Truck" << endl;
+	cout << "9  - Exact Search Container" << endl;
 	cout << "10 - Approximate Search Container" << endl;
-	cout << "0 - Exit" << endl;
+	cout << "0  - Exit" << endl;
 
 	while (repeat)
 	{
